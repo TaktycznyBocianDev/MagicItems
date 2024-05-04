@@ -1,5 +1,5 @@
-using MagicItems;
-using MagicItems.Api.Models;
+using MagicItems.Shared.Models;
+using MagicItems.API.Data;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]

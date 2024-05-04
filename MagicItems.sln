@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicItems.API", "MagicItems.API\MagicItems.API.csproj", "{8D6DBDC3-C612-47F7-AF66-539ACE4DDE5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicItems.API", "MagicItems.API\MagicItems.API.csproj", "{8D6DBDC3-C612-47F7-AF66-539ACE4DDE5C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicItems.Shared", "MagicItems.Shared\MagicItems.Shared.csproj", "{2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicItems.UI", "MagicItems.UI\MagicItems.UI.csproj", "{0F148FB7-CF20-4BE5-81C7-E4C0EA18BDA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{8D6DBDC3-C612-47F7-AF66-539ACE4DDE5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D6DBDC3-C612-47F7-AF66-539ACE4DDE5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D6DBDC3-C612-47F7-AF66-539ACE4DDE5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F148FB7-CF20-4BE5-81C7-E4C0EA18BDA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F148FB7-CF20-4BE5-81C7-E4C0EA18BDA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F148FB7-CF20-4BE5-81C7-E4C0EA18BDA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F148FB7-CF20-4BE5-81C7-E4C0EA18BDA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

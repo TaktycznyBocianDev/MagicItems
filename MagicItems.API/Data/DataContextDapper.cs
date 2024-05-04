@@ -2,7 +2,7 @@ using System.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
 
-namespace MagicItems
+namespace MagicItems.API.Data
 {
     class DataContextDapper
     {
@@ -33,7 +33,7 @@ namespace MagicItems
         public int ExecuteSqlWithRowCount(string sql, object parameters = null)
         {
             IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-           return dbConnection.Execute(sql, parameters);
+            return dbConnection.Execute(sql, parameters);
         }
     }
 }
