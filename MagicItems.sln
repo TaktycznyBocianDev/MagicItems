@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicItems.API", "MagicItem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicItems.Shared", "MagicItems.Shared\MagicItems.Shared.csproj", "{2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicItems.UI", "MagicItems.UI\MagicItems.UI.csproj", "{0F148FB7-CF20-4BE5-81C7-E4C0EA18BDA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicItems.UI", "MagicItems.UI\MagicItems.UI.csproj", "{3E6E0711-50B9-4941-ACDF-DCE8AD1B0C6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F148FB7-CF20-4BE5-81C7-E4C0EA18BDA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F148FB7-CF20-4BE5-81C7-E4C0EA18BDA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F148FB7-CF20-4BE5-81C7-E4C0EA18BDA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F148FB7-CF20-4BE5-81C7-E4C0EA18BDA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E6E0711-50B9-4941-ACDF-DCE8AD1B0C6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E6E0711-50B9-4941-ACDF-DCE8AD1B0C6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E6E0711-50B9-4941-ACDF-DCE8AD1B0C6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E6E0711-50B9-4941-ACDF-DCE8AD1B0C6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
