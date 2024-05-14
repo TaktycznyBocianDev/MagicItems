@@ -8,6 +8,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicItems.Shared", "MagicItems.Shared\MagicItems.Shared.csproj", "{2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicItems.UI", "MagicItems.UI\MagicItems.UI.csproj", "{3E6E0711-50B9-4941-ACDF-DCE8AD1B0C6A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D} = {2BB8A3B5-0BD3-43AC-B076-BD3263EECD9D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

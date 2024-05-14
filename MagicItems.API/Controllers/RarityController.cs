@@ -27,5 +27,5 @@ public class RarityController : ControllerBase
 
 
         return _dapper.LoadData<Rarities>(sql, new { Id = Id });
-    } 
+    }
 }           

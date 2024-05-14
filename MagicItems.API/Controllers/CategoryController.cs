@@ -37,7 +37,7 @@ public class CategoryController : ControllerBase
         return _dapper.LoadData<Categories>(sql, new { Id = Id, CategoryName = CategoryName });
     }
 
-    [HttpPut("CreateCategory/{CategoriesDTO}")]
+    [HttpPost("CreateCategory/{CategoriesDTO}")]
     public IActionResult CreateCategory(CategoriesDTO newCategory)
     {
         string sql = "EXEC CreateCustomCategory @newCategory";

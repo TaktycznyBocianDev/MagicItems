@@ -1,0 +1,32 @@
+﻿@page "/categories"
+
+@using MagicItems.UI.Services
+@using MagicItems.Shared.Models
+@using MagicItems.Shared.DTOs
+
+@inject CategoryService CategoryService
+
+<h1>Categories</h1>
+
+@if (CategoryList != null)
+{
+    <ul>
+        @foreach (var item in CategoryList)
+        {
+            <li>@item.CategoryName</li>
+        }
+    </ul>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    private Categories?[] CategoryList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CategoryList = await CategoryService.GetCategoriesAsync();
+    }
+}
