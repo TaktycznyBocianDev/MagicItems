@@ -1,6 +1,6 @@
 namespace MagicItems.Shared.DTOs
 {
-    public partial class CategoriesDTO
+    public partial class CategoryDTO
     {
         public string CategoryName { get; set; } = "Custom Category";
     }

@@ -22,7 +22,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("GetCategory/{Id}/{CategoryName}")]
-    public IEnumerable<Categories> GetCategory(int Id = 0, string? CategoryName = "none")
+    public IEnumerable<Category> GetCategory(int Id = 0, string? CategoryName = "none")
     {
 
         string sql = "EXEC GetCategories";
@@ -34,11 +34,11 @@ public class CategoryController : ControllerBase
 
         if (parameters.StartsWith(",")) sql += parameters.Substring(1);
 
-        return _dapper.LoadData<Categories>(sql, new { Id = Id, CategoryName = CategoryName });
+        return _dapper.LoadData<Category>(sql, new { Id = Id, CategoryName = CategoryName });
     }
 
     [HttpPost("CreateCategory/{CategoriesDTO}")]
-    public IActionResult CreateCategory(CategoriesDTO newCategory)
+    public IActionResult CreateCategory(CategoryDTO newCategory)
     {
         string sql = "EXEC CreateCustomCategory @newCategory";
 

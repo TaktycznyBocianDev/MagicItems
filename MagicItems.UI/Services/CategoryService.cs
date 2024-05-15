@@ -1,4 +1,5 @@
 ﻿using MagicItems.Shared.Models;
+using MagicItems.Shared.DTOs;
 using System;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -18,17 +19,30 @@ namespace MagicItems.UI.Services
             _httpClient = httpClient;
         }
 
-        public async Task<Categories[]> GetCategoriesAsync()
+        public async Task<Category[]> GetCategoriesAsync()
         {
             try
             {
                 HttpResponseMessage response = await _httpClient.GetAsync("Category/GetCategory/0/none");
                 response.EnsureSuccessStatusCode();
-                return await response.Content.ReadFromJsonAsync<Categories[]>();
+                return await response.Content.ReadFromJsonAsync<Category[]>();
             }
             catch (HttpRequestException ex)
             {
                 throw new HttpRequestException("Error fetching categories from the API.", ex);
+            }
+        }
+
+        public async Task CreateCategoryAsync(CategoryDTO category)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"Category/CreateCategory/{category}", category);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new HttpRequestException("Error creating category via the API.", ex);
             }
         }
 

@@ -6,16 +6,31 @@
 
 @inject CategoryService CategoryService
 
-<h1>Categories</h1>
-
+<h1>Magic Item Categories</h1>
 @if (CategoryList != null)
 {
-    <ul>
-        @foreach (var item in CategoryList)
-        {
-            <li>@item.CategoryName</li>
-        }
-    </ul>
+        <MudPaper Class="pa-3 align-baseline flex-auto" Elevation="3" Outlined="true" Square="true">
+            <MudGrid>
+                <MudTextField @bind-Value="@categoryDTO.CategoryName"  Label="Outlined" Variant="Variant.Outlined" Class="custom-text-field" ></MudTextField>
+                <MudButton OnClick="CreateNewCategory" Variant="Variant.Filled" Color="Color.Primary">Create new Category!</MudButton>
+            </MudGrid>       
+        </MudPaper>
+            
+
+        <MudGrid Justify="Justify.FlexStart">
+
+            <MudItem sm="12" md="6" lg="4">
+            @foreach (var item in CategoryList)
+            {
+                <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
+                    <MudText Typo="Typo.h4">@item.CategoryName</MudText>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Edit</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Secondary">Delete</MudButton>
+                 </MudPaper>
+            }
+            </MudItem>
+
+        </MudGrid>
 }
 else
 {
@@ -23,10 +38,19 @@ else
 }
 
 @code {
-    private Categories?[] CategoryList;
+
+    private Category?[] CategoryList;
+    private CategoryDTO? categoryDTO = new CategoryDTO();
 
     protected override async Task OnInitializedAsync()
     {
         CategoryList = await CategoryService.GetCategoriesAsync();
     }
+
+    protected async Task CreateNewCategory()
+    {
+        await CategoryService.CreateCategoryAsync(categoryDTO);
+        await OnInitializedAsync();
+    } 
+
 }

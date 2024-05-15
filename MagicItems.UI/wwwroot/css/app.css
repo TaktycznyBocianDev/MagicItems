@@ -2,6 +2,11 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.custom-text-field {
+    max-width: 100px; /* Adjust the max-width value to make the text field shorter */
+}
+
+
 h1:focus {
     outline: none;
 }
