@@ -63,4 +63,16 @@ public class CategoryController : ControllerBase
         return Ok();
     }
 
+    [HttpPut("UpdateCategory/{Id}/{CategoryNewName}")]
+    public IActionResult UpdateCategory(int Id = 0, string? CategoryNewName = "none")
+    {
+        string sql = "EXEC UpdateCategory @Id, @CategoryName";
+
+        _dapper.ExecuteSql(sql, new { Id = Id, CategoryName = CategoryNewName });
+
+        return Ok();
+    }
+
+
+
 }           

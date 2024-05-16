@@ -9,27 +9,40 @@
 <h1>Magic Item Categories</h1>
 @if (CategoryList != null)
 {
-        <MudPaper Class="pa-3 align-baseline flex-auto" Elevation="3" Outlined="true" Square="true">
-            <MudGrid>
-                <MudTextField @bind-Value="@categoryDTO.CategoryName"  Label="Outlined" Variant="Variant.Outlined" Class="custom-text-field" ></MudTextField>
-                <MudButton OnClick="CreateNewCategory" Variant="Variant.Filled" Color="Color.Primary">Create new Category!</MudButton>
-            </MudGrid>       
-        </MudPaper>
-            
+    <MudPaper Class="pa-3 align-baseline flex-auto" Elevation="3" Outlined="true" Square="true">
+        <MudGrid>
+            <MudTextField @bind-Value="@categoryDTO.CategoryName" Label="Name for new category" Variant="Variant.Outlined" Class="custom-text-field"></MudTextField>
+            <MudButton OnClick="CreateNewCategory" Variant="Variant.Filled" Color="Color.Primary">Create new Category!</MudButton>
+        </MudGrid>
+    </MudPaper>
 
         <MudGrid Justify="Justify.FlexStart">
-
             <MudItem sm="12" md="6" lg="4">
             @foreach (var item in CategoryList)
             {
                 <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
-                    <MudText Typo="Typo.h4">@item.CategoryName</MudText>
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Edit</MudButton>
-                    <MudButton Variant="Variant.Filled" Color="Color.Secondary">Delete</MudButton>
-                 </MudPaper>
+                    <div style="display: flex; align-items: center;">
+                        <MudText Typo="Typo.h4">@item.CategoryName</MudText>
+                        <div style="margin-left: auto;">
+
+                            @if(@editingCategory)
+                            {
+                            <div style="display: flex; align-items: center;">
+                                <MudTextField @bind-Value="@newName" Label="Name for new category" Variant="Variant.Outlined" Class="custom-text-field"></MudTextField>
+                                    <MudIconButton OnClick="(async () => await UpdateCategory(new Category(item.Id, newName)))" Icon="@Icons.Material.Filled.Done" aria-label="edit"></MudIconButton>
+                            </div>
+                            }
+                            else
+                            {
+                                <MudToggleIconButton @bind-Toggled="editingCategory" Icon="@Icons.Material.Filled.Edit"></MudToggleIconButton>
+                            }   
+                            
+                            <MudButton OnClick="(async () => await DeleteCategory(item.Id, item.CategoryName))" Variant="Variant.Filled" Color="Color.Secondary">Delete</MudButton>
+                        </div>
+                    </div>
+                </MudPaper>
             }
             </MudItem>
-
         </MudGrid>
 }
 else
@@ -41,16 +54,36 @@ else
 
     private Category?[] CategoryList;
     private CategoryDTO? categoryDTO = new CategoryDTO();
+    private bool editingCategory = false;
+    private string newName = "New Category Name";
 
     protected override async Task OnInitializedAsync()
     {
-        CategoryList = await CategoryService.GetCategoriesAsync();
+        await LoadCategories();
     }
 
     protected async Task CreateNewCategory()
     {
         await CategoryService.CreateCategoryAsync(categoryDTO);
-        await OnInitializedAsync();
+        await LoadCategories();
     } 
+
+    protected async Task DeleteCategory(int id, string name)
+    {
+        await CategoryService.DeleteCategoryAsync(id, name);
+        await LoadCategories();
+    }
+
+    protected async Task UpdateCategory(Category updatedCategory)
+    {
+        await CategoryService.UpdateCategoryAsync(updatedCategory);
+        editingCategory = !editingCategory;
+        await LoadCategories();
+    }
+
+    private async Task LoadCategories()
+    {
+        CategoryList = await CategoryService.GetCategoriesAsync();
+    }
 
 }
