@@ -43,5 +43,66 @@ public class ItemController : ControllerBase
             @MinPrice = MinPrice,
             @RarityId = RarityId
         });
-    } 
+    }
+
+    [HttpPost("AddItem/{ItemsDTO}")]
+    public IActionResult AddItem(ItemsDTO itemToAdd)
+    {
+        string sql = @"EXEC AddItem 
+                   @CategoryId = @CategoryId, 
+                   @ItemName = @ItemName, 
+                   @ShortDescription = @ShortDescription, 
+                   @LongDescription = @LongDescription, 
+                   @Price = @Price, 
+                   @RarityId = @RarityId";
+
+        _dapper.ExecuteSql(sql, new
+        {
+            CategoryId = itemToAdd.CategoryId,
+            ItemName = itemToAdd.ItemName,
+            ShortDescription = itemToAdd.ShortDescription,
+            LongDescription = itemToAdd.LongDescription,
+            Price = itemToAdd.Price,
+            RarityId = itemToAdd.RarityId
+        });
+
+        return Ok();
+    }
+
+    [HttpDelete("DeleteItem/{itemName}")]
+    public IActionResult DeleteItem(string itemName)
+    {
+        string sql = "EXEC DeleteItem @ItemName = @ItemName";
+
+        _dapper.ExecuteSql(sql, new { ItemName = itemName });
+
+        return Ok();
+    }
+
+    [HttpPut("UpdateItem/{itemId}")]
+    public IActionResult UpdateItem(int itemId, ItemsDTO itemToUpdate)
+    {
+        string sql = @"EXEC UpdateItem 
+        @Id = @itemId,
+        @CategoryId = @CategoryId, 
+        @ItemName = @ItemName, 
+        @ShortDescription = @ShortDescription, 
+        @LongDescription = @LongDescription, 
+        @Price = @Price, 
+        @RarityId = @RarityId";
+
+        _dapper.ExecuteSql(sql, new
+        {
+            itemId,
+            itemToUpdate.CategoryId,
+            itemToUpdate.ItemName,
+            itemToUpdate.ShortDescription,
+            itemToUpdate.LongDescription,
+            itemToUpdate.Price,
+            itemToUpdate.RarityId
+        });
+
+        return Ok();
+    }
+
 }
