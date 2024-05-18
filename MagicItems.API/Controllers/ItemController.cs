@@ -37,7 +37,7 @@ public class ItemController : ControllerBase
 
         return _dapper.LoadData<Items>(sql, new { 
             @Id = Id, 
-            @CategoryId = CategoryId, 
+            @CategoryId = CategoryId,
             @SearchItemName = SearchItemName, 
             @MaxPrice = MaxPrice,
             @MinPrice = MinPrice,

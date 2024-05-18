@@ -13,8 +13,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://
 Console.WriteLine("Current base adress: " + builder.HostEnvironment.BaseAddress);
 
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<ItemsService>();
 builder.Services.AddMudServices();
 
 await builder.Build().RunAsync();
-
-//http://localhost:5003/Category/GetCategory/0/none

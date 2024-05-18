@@ -1,0 +1,65 @@
+﻿@page "/items"
+
+@using MagicItems.Shared.Models
+@using MagicItems.UI.Services
+
+@inject ItemsService itemService
+
+
+<h3>MagicItemsPage</h3>
+
+@if (ItemsList == null)
+{
+    <p>Loading...</p>
+}
+else if (ItemsList.Length == 0)
+{
+    <p>No items found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Category Id</th>
+                <th>Name</th>
+                <th>Short Description</th>
+                <th>Long Description</th>
+                <th>Price</th>
+                <th>Rarity Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ItemsList)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.CategoryId</td>
+                    <td>@item.ItemName</td>
+                    <td>@item.ShortDescription</td>
+                    <td>@item.LongDescription</td>
+                    <td>@item.Price</td>
+                    <td>@item.RarityId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Items?[] ItemsList;
+    private ItemsDTO itemsDTO = new ItemsDTO();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadItems();
+    }
+
+    private async Task LoadItems()
+    {
+        ItemsList = await itemService.GetItemsAsync();
+    }
+
+
+}
