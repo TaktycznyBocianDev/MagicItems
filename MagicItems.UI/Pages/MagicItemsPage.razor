@@ -1,55 +1,45 @@
 ﻿@page "/items"
 
 @using MagicItems.Shared.Models
+@using MagicItems.UI.ReusableComponents
 @using MagicItems.UI.Services
 
 @inject ItemsService itemService
 
 
-<h3>MagicItemsPage</h3>
+<h1>Magic Items</h1>
 
-@if (ItemsList == null)
+@if (ItemsList != null)
 {
-    <p>Loading...</p>
-}
-else if (ItemsList.Length == 0)
-{
-    <p>No items found.</p>
+    <MudGrid Justify="Justify.FlexStart">
+        <MudItem sm="12" md="6" lg="4">
+            @foreach (var item in ItemsList)
+            {
+                <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
+                    <div style="display: flex; align-items: center;">
+                        <MudText Typo="Typo.h4">@item.ItemName</MudText>
+                        <div style="margin-left: auto;">
+                            <!-- Placeholder for future buttons (Edit/Delete) -->
+                            <!--OnClick="(async () => await DeleteCategory(item.Id, item.CategoryName))"-->
+                            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Edit</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Delete</MudButton>
+                        </div>
+                    </div>
+                </MudPaper>
+            }
+        </MudItem> 
+        <MudItem sm="12" md="6" lg="4">
+            <SimpleMagicItem Item="ItemsList[0]"></SimpleMagicItem>
+        </MudItem>
+    </MudGrid>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Category Id</th>
-                <th>Name</th>
-                <th>Short Description</th>
-                <th>Long Description</th>
-                <th>Price</th>
-                <th>Rarity Id</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in ItemsList)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.CategoryId</td>
-                    <td>@item.ItemName</td>
-                    <td>@item.ShortDescription</td>
-                    <td>@item.LongDescription</td>
-                    <td>@item.Price</td>
-                    <td>@item.RarityId</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <p>Loading...</p>
 }
 
 @code {
-    private Items?[] ItemsList;
-    private ItemsDTO itemsDTO = new ItemsDTO();
+    private Items[]? ItemsList;
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,5 +51,14 @@ else
         ItemsList = await itemService.GetItemsAsync();
     }
 
+    private async Task EditItem(Items item)
+    {
+        // Logic to handle item edit
+    }
 
+    private async Task DeleteItem(Items item)
+    {
+        // Logic to handle item edit
+    }
 }
+

@@ -1,2 +1,22 @@
 ﻿@page "/"
 
+<MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+    <MudTextField T="string" Label="Username" Required="true" RequiredError="User name is required!" />
+    <div class="d-flex">
+        <MudRadioGroup T="string" Required="true" RequiredError="Account type is required!">
+            <MudRadio Option="@("Personal")">Personal</MudRadio>
+            <MudRadio Option="@("Professional")">Professional</MudRadio>
+        </MudRadioGroup>
+    </div>
+    <div class="d-flex align-center justify-space-between">
+        <MudCheckBox T="bool" Required="true" RequiredError="You must agree" Label="I agree!" />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)" Class="ml-auto">Register</MudButton>
+    </div>
+</MudForm>  
+
+@code {
+    bool success;
+    string[] errors = { };
+    MudTextField<string> pwField1;
+    MudForm form;
+}
