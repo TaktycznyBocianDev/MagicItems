@@ -1,4 +1,4 @@
-﻿<h3>SimpleMagicItem</h3>
+﻿@* <h3>SimpleMagicItem</h3> *@
 
 @using MagicItems.Shared.Models
 
@@ -9,7 +9,8 @@
             <MudText>@Item.ShortDescription</MudText>
             <MudText>@Item.LongDescription</MudText>
             <MudText>Price: @Item.Price</MudText>
-            <MudText>Rarity: @Item.RarityId</MudText>
+            <MudText>Rarity: @Item.RarityName</MudText>
+            <MudText>Category: @Item.CategoryName</MudText>
         </MudItem>
     </MudGrid>
 </MudPaper>

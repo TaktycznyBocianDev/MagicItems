@@ -1,0 +1,81 @@
+﻿@using MagicItems.Shared.Models
+
+@using MagicItems.UI.Services
+
+@inject ItemsService itemService
+@inject CategoryService categoryService
+@inject RarityServicecs raritiesService
+
+<MudItem xs="12" sm="7">
+    <MudPaper Class="pa-4">
+        <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+
+            <MudTextField @bind-Value="ItemToUpdate.ItemName" T="string" Label="Item Name" Required="true" RequiredError="Item name is required!" />
+                <MudSelect @bind-Value="ItemToUpdate.CategoryName" Required="true" T="string" Label="Categories" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Category Name is required!">
+                    @foreach (var item in CategoryList)
+                    {
+                        <MudSelectItem Value="@(item.CategoryName)" />
+                    }
+                </MudSelect>
+            <MudTextField @bind-Value="ItemToUpdate.ShortDescription" T="string" HelperText="Max. 50 characters" Label="Short Description" Required="true" RequiredError="Short description is required!" />
+            <MudTextField @bind-Value="ItemToUpdate.LongDescription" T="string" Label="Long Description" Required="true" RequiredError="Long description is required!" />
+            <MudNumericField Required="true" @bind-Value="ItemToUpdate.Price" Label="Price" Variant="Variant.Outlined" RequiredError="Price is required!" />
+                <MudSelect @bind-Value="ItemToUpdate.RarityName" Required="true" T="string" Label="Rarities" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Rarity is required!">
+                    @foreach (var rarity in RarityList)
+                    {
+                        <MudSelectItem Value="@(rarity.RarityName)" />
+                    }
+                </MudSelect>
+        </MudForm>
+        <MudButton Variant="Variant.Filled" Color="Color.Dark" DisableElevation="true" OnClick="@(OnEscape)">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true" OnClick="@(async () => await EditItem())">Update Item</MudButton>
+    </MudPaper>
+</MudItem>
+
+
+@code {
+    MudForm form;
+    bool success = false;
+    string[] errors = { };
+
+    private Category[] CategoryList = { };
+    private Rarities[] RarityList = { };
+
+    [Parameter] public int originalItemId { get; set; } = 0;
+    [Parameter] public ItemsDTO ItemToUpdate { get; set; } = new ItemsDTO();
+    [Parameter] public Action OnEscape { get; set; } = () => {};
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategories();
+        await LoadRarities();
+    }
+
+    private async Task LoadCategories()
+    {
+        CategoryList = await categoryService.GetCategoriesAsync();
+    }
+
+    private async Task LoadRarities()
+    {
+        RarityList = await raritiesService.GetRaritiesAsync();
+    }
+
+
+    private async Task EditItem()
+    {
+        await form.Validate();
+        if (form.IsValid)
+        {
+            await itemService.UpdateItemAsync(originalItemId, ItemToUpdate);
+            
+        }
+        OnEscape.Invoke();
+        
+    }
+
+
+
+
+
+}

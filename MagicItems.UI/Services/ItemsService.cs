@@ -1,5 +1,8 @@
 ﻿using MagicItems.Shared.Models;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
 
 namespace MagicItems.UI.Services
 {
@@ -13,12 +16,12 @@ namespace MagicItems.UI.Services
             _httpClient = httpClient;
         }
 
-        //{Id}/{CategoryId}/{SearchItemName}/{MaxPrice}/{MinPrice}/{RarityId}
-        public async Task<Items[]> GetItemsAsync(int Id = 0, int CategoryId = 0, string SearchItemName = "none", double MaxPrice = 0, double MinPrice = 0, int RarityId = 0)
+        //[HttpGet("GetItems/{Id}/{SearchItemName}/{MaxPrice}/{MinPrice}/{CategoryName}/{RarityName}")]
+        public async Task<Items[]> GetItemsAsync(int Id = 0, string SearchItemName = "none", double MaxPrice = 0, double MinPrice = 0, string CategoryName = "none", string RarityName = "none")
         {
             try
             {
-                HttpResponseMessage responseMessage = await _httpClient.GetAsync($"/Item/GetItems/{Id}/{CategoryId}/{SearchItemName}/{MaxPrice}/{MinPrice}/{RarityId}");
+                HttpResponseMessage responseMessage = await _httpClient.GetAsync($"/Item/GetItems/{Id}/{SearchItemName}/{MaxPrice}/{MinPrice}/{CategoryName}/{RarityName}");
                 responseMessage.EnsureSuccessStatusCode();
                 return await responseMessage.Content.ReadFromJsonAsync<Items[]>();
 
@@ -28,5 +31,35 @@ namespace MagicItems.UI.Services
                 throw new HttpRequestException("Error fetching categories from the API.", ex);
             }
         }
+       
+        public async Task DeleteItemAsync(string itemName)
+        {
+            try
+            {
+                HttpResponseMessage responseMessage = await _httpClient.DeleteAsync($"/Item/DeleteItem/{itemName}");
+                responseMessage.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new HttpRequestException("Error deleting category", ex);
+            }
+        }
+
+        public async Task UpdateItemAsync(int Id, ItemsDTO itemAfterUpdate)
+        {
+            try
+            {
+                var jsonContent = new StringContent(JsonSerializer.Serialize(itemAfterUpdate), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage responseMessage = await _httpClient.PutAsync($"/Item/UpdateItem/{Id}", jsonContent);
+                responseMessage.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new HttpRequestException("Error updating category", ex);
+            }
+        }
+
     }
+
 }

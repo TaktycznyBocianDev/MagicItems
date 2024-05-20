@@ -12,7 +12,7 @@
 @if (ItemsList != null)
 {
     <MudGrid Justify="Justify.FlexStart">
-        <MudItem sm="12" md="6" lg="4">
+        <MudItem sm="12" md="6" lg="5">
             @foreach (var item in ItemsList)
             {
                 <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
@@ -21,15 +21,20 @@
                         <div style="margin-left: auto;">
                             <!-- Placeholder for future buttons (Edit/Delete) -->
                             <!--OnClick="(async () => await DeleteCategory(item.Id, item.CategoryName))"-->
-                            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Edit</MudButton>
-                            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Delete</MudButton>
+                            <MudIconButton OnClick="(async () => await EditingModeSwitch(item.Id, item))" Icon="@Icons.Material.Filled.Edit" Title="Favorite" />
+                            <MudIconButton OnClick="(async () => await ShowItem(item))" Icon="@Icons.Material.Filled.RemoveRedEye" Title="Favorite" Color="@Color.Primary" />
+                            <MudIconButton OnClick="(async () => await DeleteItem(item.ItemName))" Icon="@Icons.Material.Filled.Delete" Title="Favorite" Color="@Color.Error" />
                         </div>
                     </div>
                 </MudPaper>
             }
-        </MudItem> 
-        <MudItem sm="12" md="6" lg="4">
-            <SimpleMagicItem Item="ItemsList[0]"></SimpleMagicItem>
+        </MudItem>
+        <MudItem sm="12" md="6" lg="5">
+            <ItemDisplayComponent Item="@shownItem"></ItemDisplayComponent>
+            @if (editingItem)
+            {
+                <ItemUpdatingComponent originalItemId="editingItemId" ItemToUpdate="itemToUpdate" OnEscape="async () => await CloseEditing()"></ItemUpdatingComponent>
+            }
         </MudItem>
     </MudGrid>
 }
@@ -40,6 +45,44 @@ else
 
 @code {
     private Items[]? ItemsList;
+    private Items? shownItem;
+
+    private bool editingItem = false;
+
+    private int editingItemId = 0;
+    private ItemsDTO itemToUpdate = new ItemsDTO();
+
+    private async Task PrepareItemToUpdate(Items item)
+    {
+        itemToUpdate.ItemName = item.ItemName;
+        itemToUpdate.ShortDescription = item.ShortDescription;
+        itemToUpdate.LongDescription = item.LongDescription;
+        itemToUpdate.Price = item.Price;
+        itemToUpdate.CategoryName = item.CategoryName;
+        itemToUpdate.RarityName = item.RarityName;
+    }
+
+    private async Task EditingModeSwitch(int itemId, Items item)
+    {
+        shownItem = null;
+        editingItemId = itemId;
+        await PrepareItemToUpdate(item);
+        editingItem = !editingItem;
+        await LoadItems();
+    }
+
+    private async Task CloseEditing()
+    {
+        editingItemId = 0;
+        editingItem = !editingItem;
+        await LoadItems();
+    }
+
+    private async Task ShowItem(Items itemToShow)
+    {
+        shownItem = itemToShow;
+        editingItem = false;
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -51,14 +94,12 @@ else
         ItemsList = await itemService.GetItemsAsync();
     }
 
-    private async Task EditItem(Items item)
-    {
-        // Logic to handle item edit
-    }
 
-    private async Task DeleteItem(Items item)
+    private async Task DeleteItem(string itemName)
     {
-        // Logic to handle item edit
+        await itemService.DeleteItemAsync(itemName);
+        if (shownItem.ItemName == itemName) shownItem = null;
+        await LoadItems();
     }
 }
 
