@@ -19,8 +19,6 @@
                     <div style="display: flex; align-items: center;">
                         <MudText Typo="Typo.h4">@item.ItemName</MudText>
                         <div style="margin-left: auto;">
-                            <!-- Placeholder for future buttons (Edit/Delete) -->
-                            <!--OnClick="(async () => await DeleteCategory(item.Id, item.CategoryName))"-->
                             <MudIconButton OnClick="(async () => await EditingModeSwitch(item.Id, item))" Icon="@Icons.Material.Filled.Edit" Title="Favorite" />
                             <MudIconButton OnClick="(async () => await ShowItem(item))" Icon="@Icons.Material.Filled.RemoveRedEye" Title="Favorite" Color="@Color.Primary" />
                             <MudIconButton OnClick="(async () => await DeleteItem(item.ItemName))" Icon="@Icons.Material.Filled.Delete" Title="Favorite" Color="@Color.Error" />
@@ -33,7 +31,7 @@
             <ItemDisplayComponent Item="@shownItem"></ItemDisplayComponent>
             @if (editingItem)
             {
-                <ItemUpdatingComponent originalItemId="editingItemId" ItemToUpdate="itemToUpdate" OnEscape="async () => await CloseEditing()"></ItemUpdatingComponent>
+                <ItemUpdatingComponent originalItemId="editingItemId" ItemToUpdate="itemToUpdate" OnEscape="async () => await CloseEditing()" OnItemUpdated="async () => await OnItemUpdated()"></ItemUpdatingComponent>
             }
         </MudItem>
     </MudGrid>
@@ -68,14 +66,13 @@ else
         editingItemId = itemId;
         await PrepareItemToUpdate(item);
         editingItem = !editingItem;
-        await LoadItems();
     }
 
     private async Task CloseEditing()
     {
         editingItemId = 0;
+        itemToUpdate = new ItemsDTO();
         editingItem = !editingItem;
-        await LoadItems();
     }
 
     private async Task ShowItem(Items itemToShow)
@@ -99,6 +96,11 @@ else
     {
         await itemService.DeleteItemAsync(itemName);
         if (shownItem.ItemName == itemName) shownItem = null;
+        await LoadItems();
+    }
+
+    private async Task OnItemUpdated()
+    {
         await LoadItems();
     }
 }

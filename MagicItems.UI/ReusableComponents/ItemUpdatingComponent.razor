@@ -44,6 +44,7 @@
     [Parameter] public int originalItemId { get; set; } = 0;
     [Parameter] public ItemsDTO ItemToUpdate { get; set; } = new ItemsDTO();
     [Parameter] public Action OnEscape { get; set; } = () => {};
+    [Parameter] public EventCallback OnItemUpdated { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,9 +69,8 @@
         if (form.IsValid)
         {
             await itemService.UpdateItemAsync(originalItemId, ItemToUpdate);
-            
+            await OnItemUpdated.InvokeAsync(null);
         }
-        OnEscape.Invoke();
         
     }
 
