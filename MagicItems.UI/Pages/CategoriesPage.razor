@@ -16,34 +16,37 @@
         </MudGrid>
     </MudPaper>
 
-        <MudGrid Justify="Justify.FlexStart">
+    <MudGrid Justify="Justify.FlexStart">
+        @foreach (var item in CategoryList)
+        {
             <MudItem sm="12" md="6" lg="4">
-            @foreach (var item in CategoryList)
-            {
                 <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
                     <div style="display: flex; align-items: center;">
-                        <MudText Typo="Typo.h4">@item.CategoryName</MudText>
+                        @if (editingCategoryId == item.Id)
+                        {
+                            <MudTextField @bind-Value="@newName" Label="New category name" Variant="Variant.Outlined" Class="custom-text-field"></MudTextField>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.h4">@item.CategoryName</MudText>
+                        }
                         <div style="margin-left: auto;">
-
-                            @if(@editingCategory)
+                            @if (editingCategoryId == item.Id)
                             {
-                            <div style="display: flex; align-items: center;">
-                                <MudTextField @bind-Value="@newName" Label="Name for new category" Variant="Variant.Outlined" Class="custom-text-field"></MudTextField>
-                                    <MudIconButton OnClick="(async () => await UpdateCategory(new Category(item.Id, newName)))" Icon="@Icons.Material.Filled.Done" aria-label="edit"></MudIconButton>
-                            </div>
+                                <MudIconButton OnClick="(async () => await UpdateCategory(new Category(item.Id, newName)))" Icon="@Icons.Material.Filled.Done" aria-label="edit"></MudIconButton>
+                                <MudIconButton OnClick="CancelEditing" Icon="@Icons.Material.Filled.Close" aria-label="cancel"></MudIconButton>
                             }
                             else
                             {
-                                <MudToggleIconButton @bind-Toggled="editingCategory" Icon="@Icons.Material.Filled.Edit"></MudToggleIconButton>
-                            }   
-                            
-                            <MudButton OnClick="(async () => await DeleteCategory(item.Id, item.CategoryName))" Variant="Variant.Filled" Color="Color.Secondary">Delete</MudButton>
+                                <MudIconButton OnClick="() => StartEditing(item.Id, item.CategoryName)" Icon="@Icons.Material.Filled.Edit" aria-label="edit"></MudIconButton>
+                                <MudButton OnClick="(async () => await DeleteCategory(item.Id, item.CategoryName))" Variant="Variant.Filled" Color="Color.Secondary">Delete</MudButton>
+                            }
                         </div>
                     </div>
                 </MudPaper>
-            }
             </MudItem>
-        </MudGrid>
+        }
+    </MudGrid>
 }
 else
 {
@@ -51,22 +54,21 @@ else
 }
 
 @code {
-
     private Category[]? CategoryList;
     private CategoryDTO? categoryDTO = new CategoryDTO();
-    private bool editingCategory = false;
-    private string newName = "New Category Name";
+    private int? editingCategoryId = null;  // Changed from boolean to nullable int
+    private string newName = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadCategories(); 
+        await LoadCategories();
     }
 
     protected async Task CreateNewCategory()
     {
         await CategoryService.CreateCategoryAsync(categoryDTO);
         await LoadCategories();
-    } 
+    }
 
     protected async Task DeleteCategory(int id, string name)
     {
@@ -77,13 +79,23 @@ else
     protected async Task UpdateCategory(Category updatedCategory)
     {
         await CategoryService.UpdateCategoryAsync(updatedCategory);
-        editingCategory = !editingCategory;
+        editingCategoryId = null; // Clear the editing state
         await LoadCategories();
+    }
+
+    private void StartEditing(int id, string currentName)
+    {
+        editingCategoryId = id;
+        newName = currentName; // Initialize with the current category name
+    }
+
+    private void CancelEditing()
+    {
+        editingCategoryId = null; // Cancel editing
     }
 
     private async Task LoadCategories()
     {
         CategoryList = await CategoryService.GetCategoriesAsync();
     }
-
 }
