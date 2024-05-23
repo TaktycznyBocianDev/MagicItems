@@ -31,7 +31,7 @@ namespace MagicItems.UI.Services
                 throw new HttpRequestException("Error fetching categories from the API.", ex);
             }
         }
-       
+
         public async Task DeleteItemAsync(string itemName)
         {
             try
@@ -60,6 +60,20 @@ namespace MagicItems.UI.Services
             }
         }
 
-    }
+        public async Task AddItemAsync(ItemsDTO newItem)
+        {
+            try
+            {
+                var jsonContent = new StringContent(JsonSerializer.Serialize(newItem), Encoding.UTF8, "application/json");
 
+                HttpResponseMessage responseMessage = await _httpClient.PostAsync($"/Item/AddItem/{newItem}", jsonContent);
+                responseMessage.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new HttpRequestException("Error updating category", ex);
+            }
+        }
+
+    }
 }

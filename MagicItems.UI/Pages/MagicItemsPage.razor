@@ -13,14 +13,17 @@
 {
     <MudGrid Justify="Justify.FlexStart">
         <MudItem sm="12" md="6" lg="5">
+            <div style="display: flex; align-items: center;">
+                <MudFab OnClick="async () => await AddSwitch()" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Label="Add Item" />
+            </div>
             @foreach (var item in ItemsList)
             {
                 <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
                     <div style="display: flex; align-items: center;">
                         <MudText Typo="Typo.h4">@item.ItemName</MudText>
                         <div style="margin-left: auto;">
-                            <MudIconButton OnClick="(async () => await EditingModeSwitch(item.Id, item))" Icon="@Icons.Material.Filled.Edit" Title="Favorite" />
-                            <MudIconButton OnClick="(async () => await ShowItem(item))" Icon="@Icons.Material.Filled.RemoveRedEye" Title="Favorite" Color="@Color.Primary" />
+                            <MudIconButton OnClick="(async () => await EditSwitch(item.Id, item))" Icon="@Icons.Material.Filled.Edit" Title="Favorite" />
+                            <MudIconButton OnClick="(async () => await ShowSwitch(item))" Icon="@Icons.Material.Filled.RemoveRedEye" Title="Favorite" Color="@Color.Primary" />
                             <MudIconButton OnClick="(async () => await DeleteItem(item.ItemName))" Icon="@Icons.Material.Filled.Delete" Title="Favorite" Color="@Color.Error" />
                         </div>
                     </div>
@@ -31,7 +34,11 @@
             <ItemDisplayComponent Item="@shownItem"></ItemDisplayComponent>
             @if (editingItem)
             {
-                <ItemUpdatingComponent originalItemId="editingItemId" ItemToUpdate="itemToUpdate" OnEscape="async () => await CloseEditing()" OnItemUpdated="async () => await OnItemUpdated()"></ItemUpdatingComponent>
+                <ItemUpdatingComponent originalItemId="editingItemId" ItemToUpdate="itemToUpdate" OnEscape="async () => await CloseAdditionalWindow()" OnItemUpdated="async () => await LoadItems()"></ItemUpdatingComponent>
+            }
+            @if (addingItem)
+            {
+                <ItemToAddComponent OnEscape="async () => await CloseAdditionalWindow()" OnItemAdded="async () => await LoadItems()"></ItemToAddComponent>
             }
         </MudItem>
     </MudGrid>
@@ -43,12 +50,23 @@ else
 
 @code {
     private Items[]? ItemsList;
-    private Items? shownItem;
 
+    private Items? shownItem;
     private bool editingItem = false;
+    private bool addingItem = false;
 
     private int editingItemId = 0;
+
     private ItemsDTO itemToUpdate = new ItemsDTO();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadItems();
+    }
+    private async Task LoadItems()
+    {
+        ItemsList = await itemService.GetItemsAsync();
+    }
 
     private async Task PrepareItemToUpdate(Items item)
     {
@@ -60,48 +78,47 @@ else
         itemToUpdate.RarityName = item.RarityName;
     }
 
-    private async Task EditingModeSwitch(int itemId, Items item)
+    private async Task EditSwitch(int itemId, Items item)
     {
         shownItem = null;
+        addingItem = false;
+
         editingItemId = itemId;
         await PrepareItemToUpdate(item);
-        editingItem = !editingItem;
+
+        editingItem = true;
     }
 
-    private async Task CloseEditing()
+    private async Task AddSwitch()
+    {
+        shownItem = null;
+        editingItem = false;
+
+        addingItem = true;
+    }
+    private async Task ShowSwitch(Items itemToShow)
+    {
+        editingItem = false;
+        addingItem = false;
+
+        shownItem = itemToShow;
+    }
+
+    private async Task CloseAdditionalWindow()
     {
         editingItemId = 0;
         itemToUpdate = new ItemsDTO();
-        editingItem = !editingItem;
-    }
-
-    private async Task ShowItem(Items itemToShow)
-    {
-        shownItem = itemToShow;
         editingItem = false;
+        addingItem = false;
+        shownItem = null;
     }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadItems();
-    }
-
-    private async Task LoadItems()
-    {
-        ItemsList = await itemService.GetItemsAsync();
-    }
-
 
     private async Task DeleteItem(string itemName)
     {
         await itemService.DeleteItemAsync(itemName);
-        if (shownItem.ItemName == itemName) shownItem = null;
+        if (shownItem is not null && shownItem.ItemName == itemName) shownItem = null;
         await LoadItems();
     }
 
-    private async Task OnItemUpdated()
-    {
-        await LoadItems();
-    }
 }
 

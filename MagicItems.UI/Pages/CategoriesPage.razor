@@ -56,7 +56,7 @@ else
 @code {
     private Category[]? CategoryList;
     private CategoryDTO? categoryDTO = new CategoryDTO();
-    private int? editingCategoryId = null;  // Changed from boolean to nullable int
+    private int? editingCategoryId = null; 
     private string newName = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -79,19 +79,19 @@ else
     protected async Task UpdateCategory(Category updatedCategory)
     {
         await CategoryService.UpdateCategoryAsync(updatedCategory);
-        editingCategoryId = null; // Clear the editing state
+        editingCategoryId = null;
         await LoadCategories();
     }
 
     private void StartEditing(int id, string currentName)
     {
         editingCategoryId = id;
-        newName = currentName; // Initialize with the current category name
+        newName = currentName; 
     }
 
     private void CancelEditing()
     {
-        editingCategoryId = null; // Cancel editing
+        editingCategoryId = null; 
     }
 
     private async Task LoadCategories()

@@ -7,17 +7,17 @@
 <MudItem xs="12" sm="7">
     <MudPaper Class="pa-4">
         <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
-            <MudTextField @bind-Value="ItemToUpdate.ItemName" T="string" Label="Item Name" Required="true" RequiredError="Item name is required!" />
-            <MudSelect @bind-Value="ItemToUpdate.CategoryName" Required="true" T="string" Label="Categories" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Category Name is required!">
+            <MudTextField @bind-Value="NewItem.ItemName" T="string" Label="Item Name" Required="true" RequiredError="Item name is required!" />
+            <MudSelect @bind-Value="NewItem.CategoryName" Required="true" T="string" Label="Categories" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Category Name is required!">
                 @foreach (var item in CategoryList)
                 {
                     <MudSelectItem Value="@(item.CategoryName)" />
                 }
             </MudSelect>
-            <MudTextField @bind-Value="ItemToUpdate.ShortDescription" T="string" HelperText="Max. 50 characters" Label="Short Description" Required="true" RequiredError="Short description is required!" />
-            <MudTextField @bind-Value="ItemToUpdate.LongDescription" T="string" Label="Long Description" Required="true" RequiredError="Long description is required!" />
-            <MudNumericField Required="true" @bind-Value="ItemToUpdate.Price" Label="Price" Variant="Variant.Outlined" RequiredError="Price is required!" />
-            <MudSelect @bind-Value="ItemToUpdate.RarityName" Required="true" T="string" Label="Rarities" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Rarity is required!">
+            <MudTextField @bind-Value="NewItem.ShortDescription" T="string" HelperText="Max. 50 characters" Label="Short Description" Required="true" RequiredError="Short description is required!" />
+            <MudTextField @bind-Value="NewItem.LongDescription" T="string" Label="Long Description" Required="true" RequiredError="Long description is required!" />
+            <MudNumericField Required="true" @bind-Value="NewItem.Price" Label="Price" Variant="Variant.Outlined" RequiredError="Price is required!" />
+            <MudSelect @bind-Value="NewItem.RarityName" Required="true" T="string" Label="Rarities" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Rarity is required!">
                 @foreach (var rarity in RarityList)
                 {
                     <MudSelectItem Value="@(rarity.RarityName)" />
@@ -25,7 +25,7 @@
             </MudSelect>
         </MudForm>
         <MudButton Variant="Variant.Filled" Color="Color.Dark" DisableElevation="true" OnClick="@(OnEscape)">Cancel</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true" OnClick="@(async () => await EditItem())">Update Item</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true" OnClick="@(async () => await AddItem())">Add item</MudButton>
 
         @if (errors.Any())
         {
@@ -46,16 +46,18 @@
 
     private Category[] CategoryList = { };
     private Rarities[] RarityList = { };
+    private Items[] ItemsList = { };
 
-    [Parameter] public int originalItemId { get; set; } = 0;
-    [Parameter] public ItemsDTO ItemToUpdate { get; set; } = new ItemsDTO();
+    public ItemsDTO NewItem { get; set; } = new ItemsDTO();
+
     [Parameter] public Action OnEscape { get; set; } = () => { };
-    [Parameter] public EventCallback OnItemUpdated { get; set; }
+    [Parameter] public EventCallback OnItemAdded { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await LoadCategories();
         await LoadRarities();
+        await LoadItems();
     }
 
     private async Task LoadCategories()
@@ -68,25 +70,30 @@
         RarityList = await raritiesService.GetRaritiesAsync();
     }
 
+    private async Task LoadItems()
+    {
+        ItemsList = await itemService.GetItemsAsync();
+    }
+
     private async Task<bool> IsDuplicateItemName(string itemName)
     {
         var items = await itemService.GetItemsAsync();
-        return items.Any(i => i.ItemName.Equals(itemName, StringComparison.OrdinalIgnoreCase) && i.Id != originalItemId);
+        return items.Any(i => i.ItemName.Equals(itemName, StringComparison.OrdinalIgnoreCase));
     }
 
-    private async Task EditItem()
+    private async Task AddItem()
     {
         await form.Validate();
         if (form.IsValid)
         {
-            if (await IsDuplicateItemName(ItemToUpdate.ItemName))
+            if (await IsDuplicateItemName(NewItem.ItemName))
             {
                 errors = new[] { "An item with this name already exists. Please choose a different name." };
                 return;
             }
 
-            await itemService.UpdateItemAsync(originalItemId, ItemToUpdate);
-            await OnItemUpdated.InvokeAsync(null);
+            await itemService.AddItemAsync(NewItem);
+            await OnItemAdded.InvokeAsync(null);
         }
     }
 }
