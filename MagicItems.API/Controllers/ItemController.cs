@@ -13,6 +13,13 @@ public class ItemController : ControllerBase
         _dapper = new DataContextDapper(configuration);
     }
 
+    [HttpGet("GetItemIdByName/{itemName}")]
+    public int GetItemIdByName(string itemName)
+    {
+        string sql = "EXEC GetItemIdByName @ItemName = @itemName";
+        return _dapper.LoadDataSingle<int>(sql, new { itemName });
+    }
+
     [HttpGet("GetItems/{Id}/{SearchItemName}/{MaxPrice}/{MinPrice}/{CategoryName}/{RarityName}")]
     public IEnumerable<Items> GetItems(
         int Id = 0, 
