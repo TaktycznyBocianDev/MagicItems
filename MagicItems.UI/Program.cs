@@ -15,6 +15,8 @@ Console.WriteLine("Current base adress: " + builder.HostEnvironment.BaseAddress)
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ItemsService>();
 builder.Services.AddScoped<RarityServicecs>();
+builder.Services.AddScoped<ShopService>();
+builder.Services.AddScoped<ShopItemService>();
 builder.Services.AddMudServices();
 
 await builder.Build().RunAsync();

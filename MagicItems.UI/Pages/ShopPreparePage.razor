@@ -1,7 +1,95 @@
 ﻿@page "/shopCreate"
 
-<h3>ShopPreparePage</h3>
+@using MagicItems.Shared.Models
+@using MagicItems.UI.Services
+@using MudBlazor
+
+
+@inject ShopItemService ShopItemService
+
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper Class="pa-4">
+        <MudTextField Label="Shop Name" @bind-Value="shopName" />
+
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="FetchItems">Fetch Items</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="AddItemToShop">Add Item</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="RemoveItemFromShop">Remove Item</MudButton>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <MudAlert Severity="Severity.Info">@message</MudAlert>
+        }
+
+        <MudTable Items="items" Striped="true" Hover="true">
+            <HeaderContent>
+                <MudTh>Item Name</MudTh>
+                <MudTh>Short Description</MudTh>
+                <MudTh>Long Description</MudTh>
+                <MudTh>Price</MudTh>
+                <MudTh>Category</MudTh>
+                <MudTh>Rarity</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.ItemName</MudTd>
+                <MudTd>@context.ShortDescription</MudTd>
+                <MudTd>@context.LongDescription</MudTd>
+                <MudTd>@context.Price</MudTd>
+                <MudTd>@context.CategoryName</MudTd>
+                <MudTd>@context.RarityName</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudPaper>
+</MudContainer>
 
 @code {
+    private string shopName = string.Empty;
+    private string itemName = string.Empty;
+    private Items[] items;
+    private string message;
+
+    private Items[] itemToAdd = new Items[0];
+
+
+    private async Task FetchItems()
+    {
+        try
+        {
+            items = await ShopItemService.GetShopsAsync(shopName);
+            message = items.Length > 0 ? "Items fetched successfully." : "No items found.";
+        }
+        catch (HttpRequestException ex)
+        {
+            message = ex.Message;
+        }
+    }
+
+    private async Task AddItemToShop()
+    {
+        try
+        {
+            await ShopItemService.AddItemListToShopAsync(shopName, itemToAdd);
+            message = "Item added successfully.";
+            await FetchItems();
+        }
+        catch (HttpRequestException ex)
+        {
+            message = ex.Message;
+        }
+    }
+
+    private async Task RemoveItemFromShop()
+    {
+        try
+        {
+            await ShopItemService.RemoveItemFromShopAsync(shopName, "Magic Sword");
+            message = "Item removed successfully.";
+            await FetchItems();
+        }
+        catch (HttpRequestException ex)
+        {
+            message = ex.Message;
+        }
+    }
 
 }

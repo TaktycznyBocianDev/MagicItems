@@ -21,14 +21,14 @@ namespace MagicItems.API.Controllers
             _itemController = new ItemController(configuration);
         }
 
-        [HttpGet("GetItemsInShop")]
-        public IEnumerable<Items> GetItemsInShop(string ShopName)
+        [HttpGet("GetItemsInShop/{ShopName}")]
+        public IEnumerable<Items> GetItemsInShop(string ShopName )
         {
             string sql = "EXEC GetItemsInShop @ShopName = @ShopName";
             return _dapper.LoadData<Items>(sql, new { @ShopName = ShopName });
         }
 
-        [HttpPut("AddOneItemToShop")]
+        [HttpPut("AddOneItemToShop/{ShopName}/{ItemName}")]
         public IActionResult AddOneItemToShop(string ShopName, string ItemName)
         {
 
@@ -41,7 +41,7 @@ namespace MagicItems.API.Controllers
             return Ok();
         }
 
-        [HttpPut("AddItemListToShop")]
+        [HttpPut("AddItemListToShop/{ShopName}")]
         public IActionResult AddItemListToShop(string ShopName, Items[] items)
         {
             int ShopId = _shopController.GetShopIdByName(ShopName);
@@ -54,7 +54,7 @@ namespace MagicItems.API.Controllers
             return Ok();
         }
 
-        [HttpPut("AddItemDTOsToShop")]
+        [HttpPut("AddItemDTOsToShop/{ShopName}")]
         public IActionResult AddItemDTOsToShop(string ShopName, ItemsDTO[] items)
         {
 
@@ -70,7 +70,7 @@ namespace MagicItems.API.Controllers
 
         }
 
-        [HttpDelete("RemoveItemFromShop")]
+        [HttpDelete("RemoveItemFromShop/{ShopName}/{ItemName}")]
         public IActionResult RemoveItemFromShop(string ShopName, string ItemName)
         {
 

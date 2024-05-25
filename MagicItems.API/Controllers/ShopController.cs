@@ -45,7 +45,7 @@ namespace MagicItems.API.Controllers
             
         }
 
-        [HttpPut("UpdateShop")]
+        [HttpPut("UpdateShop/{shopId}")]
         public IActionResult UpdateShop(int shopId, ShopDTO ShopToUpdate)
         {
             string sql = @"EXEC UpdateShop
@@ -57,7 +57,7 @@ namespace MagicItems.API.Controllers
             return Ok();
         }
 
-        [HttpDelete("DeleteShop")]
+        [HttpDelete("DeleteShop/{ShopName}")]
         public IActionResult DeleteShop(string ShopName)
         {
             string sql = "EXEC DeleteShop @ShopName = @ShopName";

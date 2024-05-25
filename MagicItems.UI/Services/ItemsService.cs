@@ -71,7 +71,7 @@ namespace MagicItems.UI.Services
             }
             catch (HttpRequestException ex)
             {
-                throw new HttpRequestException("Error updating category", ex);
+                throw new HttpRequestException("Error adding item", ex);
             }
         }
 
