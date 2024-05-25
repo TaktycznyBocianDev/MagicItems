@@ -1,0 +1,75 @@
+﻿@using MagicItems.Shared.Models
+@using MagicItems.UI.Services
+
+@inject ItemsService itemService
+@inject CategoryService categoryService
+@inject RarityServicecs raritiesService
+
+<MudItem xs="12" sm="7">
+    <MudPaper Class="pa-1 ma-1" Elevation="0">
+        <MudStack Spacing="1"> 
+            <MudText Typo="Typo.subtitle1">Filters:</MudText>
+                <MudTextField @bind-Value="SearchItemName" T="string" Label="Search name" />
+                <MudSelect @bind-Value="CategoryName" Required="true" T="string" Label="Categories" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Category Name is required!">
+                        <MudSelectItem Value="@("---")" />
+                    @foreach (var item in CategoryList)
+                    {
+                        <MudSelectItem Value="@(item.CategoryName)" />
+                    }
+                </MudSelect>
+            <MudNumericField @bind-Value="MinPrice" Label="Minimal item price" Variant="Variant.Outlined" Step="1" Min="0"/>
+            <MudNumericField @bind-Value="MaxPrice" Label="Maximal item price" Variant="Variant.Outlined" Step="1" Min="1" />
+            <MudSelect @bind-Value="RarityName" Required="true" T="string" Label="Rarities" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Rarity is required!">
+                <MudSelectItem Value="@("---")" />
+                @foreach (var rarity in RarityList)
+                {
+                    <MudSelectItem Value="@(rarity.RarityName)" />
+                }
+            </MudSelect>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ApplyFilters">Filter</MudButton>
+        </MudStack>
+    </MudPaper>
+</MudItem>
+
+@code {
+
+    private Category[] CategoryList = { };
+    private Rarities[] RarityList = { };
+    private Items[] ItemsList = { };
+
+    private string SearchItemName = "---";
+    private string CategoryName = "---";
+    private string RarityName = "---";
+    private int MinPrice = 0;
+    private int MaxPrice = 999999;
+
+    [Parameter]
+    public EventCallback<Items[]> OnFilterApplied { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategories();
+        await LoadRarities();
+    }
+
+    private async Task LoadCategories()
+    {
+        CategoryList = await categoryService.GetCategoriesAsync();
+    }
+
+    private async Task LoadRarities()
+    {
+        RarityList = await raritiesService.GetRaritiesAsync();
+    }
+
+    private async Task ApplyFilters()
+    {
+        if (SearchItemName == "---") SearchItemName = "none";
+        if (CategoryName == "---") CategoryName = "none";
+        if (RarityName == "---") RarityName = "none";
+
+        ItemsList = await itemService.GetItemsAsync(0, SearchItemName, MaxPrice, MinPrice, CategoryName, RarityName);
+        await OnFilterApplied.InvokeAsync(ItemsList);
+    }
+}

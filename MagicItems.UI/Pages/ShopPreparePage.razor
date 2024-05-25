@@ -2,54 +2,107 @@
 
 @using MagicItems.Shared.Models
 @using MagicItems.UI.Services
+@using MagicItems.UI.ReusableComponents
 @using MudBlazor
 
 
 @inject ShopItemService ShopItemService
+@inject CategoryService categoryService
+@inject RarityServicecs raritiesService
 
 
 <MudContainer MaxWidth="MaxWidth.Large">
     <MudPaper Class="pa-4">
-        <MudTextField Label="Shop Name" @bind-Value="shopName" />
-
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="FetchItems">Fetch Items</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="AddItemToShop">Add Item</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="RemoveItemFromShop">Remove Item</MudButton>
-
-        @if (!string.IsNullOrEmpty(message))
-        {
-            <MudAlert Severity="Severity.Info">@message</MudAlert>
-        }
-
-        <MudTable Items="items" Striped="true" Hover="true">
-            <HeaderContent>
-                <MudTh>Item Name</MudTh>
-                <MudTh>Short Description</MudTh>
-                <MudTh>Long Description</MudTh>
-                <MudTh>Price</MudTh>
-                <MudTh>Category</MudTh>
-                <MudTh>Rarity</MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd>@context.ItemName</MudTd>
-                <MudTd>@context.ShortDescription</MudTd>
-                <MudTd>@context.LongDescription</MudTd>
-                <MudTd>@context.Price</MudTd>
-                <MudTd>@context.CategoryName</MudTd>
-                <MudTd>@context.RarityName</MudTd>
-            </RowTemplate>
-        </MudTable>
+        <MudText Typo="Typo.h4">Information about shop:</MudText>
+            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                <MudTextField @bind-Value="shopName" T="string" Label="What is name of this shop?" Required="true" RequiredError="Shop have to have a name!" />
+                <MudTextField @bind-Value="shopOwner" T="string" Label="Who runs this shop?"/>
+            </MudForm>
     </MudPaper>
+
+    <div style="margin: 50px 0;"></div>
+
+    <MudGrid Justify="Justify.FlexStart">
+        <MudItem xs="7"> 
+            <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                <MudStack Spacing="3"> 
+                    <MudText Typo="Typo.h4">Add random items to shop:
+                        
+                        <ItemFilter OnFilterApplied="HandleFilterApplied"></ItemFilter>
+                        @foreach (var item in itemsListToPick)
+                        {
+                            <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
+                                <div style="display: flex; align-items: center;">
+                                    <MudText Typo="Typo.h4">@item.ItemName</MudText>
+                                    <div style="margin-left: auto;">
+                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Title="Favorite" />
+                                        <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Title="Favorite" Color="@Color.Primary" />
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Title="Favorite" Color="@Color.Error" />
+                                    </div>
+                                </div>
+                            </MudPaper>
+                        }
+                    </MudText>
+                </MudStack>           
+                
+                
+
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="7">
+            <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+
+                <MudText Typo="Typo.h6">Add specific item to shop:</MudText>
+                <MudPaper Class="pa-1 ma-1" Elevation="0">
+                    <MudText Typo="Typo.subtitle1">How many items should be added: </MudText>
+                    <MudNumericField @bind-Value="howManyItems" Variant="Variant.Outlined" Step="1" Min="0" />
+                </MudPaper>
+
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
 </MudContainer>
 
 @code {
+    MudForm form;
+    bool success = false;
+    string[] errors = { };
+
     private string shopName = string.Empty;
+    private string shopOwner = string.Empty;
     private string itemName = string.Empty;
-    private Items[] items;
     private string message;
 
-    private Items[] itemToAdd = new Items[0];
 
+    private Items[] itemToAdd = new Items[0];
+    private Items[] itemsListToPick = new Items[0];
+    private Items[] items = new Items[0];
+
+    private int howManyItems = 5;
+    private string CategoryName = "none";
+    private Category[] CategoryList = { };
+    private Rarities[] RarityList = { };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategories();
+        await LoadRarities();
+    }
+
+    private async Task LoadCategories()
+    {
+        CategoryList = await categoryService.GetCategoriesAsync();
+    }
+
+    private async Task LoadRarities()
+    {
+        RarityList = await raritiesService.GetRaritiesAsync();
+    }
+
+    private void HandleFilterApplied(Items[] items)
+    {
+        itemsListToPick = items;
+    }
 
     private async Task FetchItems()
     {
@@ -63,6 +116,8 @@
             message = ex.Message;
         }
     }
+
+
 
     private async Task AddItemToShop()
     {
