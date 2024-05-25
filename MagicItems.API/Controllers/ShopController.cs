@@ -16,6 +16,14 @@ namespace MagicItems.API.Controllers
             _dapper = new DataContextDapper(configuration);
         }
 
+        [HttpGet("GetShopIdByName")]
+        public int GetShopIdByName(string ShopName)
+        {
+            string sql = "EXEC GetShopIdByName @ShopName = @ShopName";
+            return _dapper.LoadDataSingle<int>(sql, new { @ShopName = ShopName });
+            
+        }
+
         [HttpGet("GetShops/{ShopName}")]
         public IEnumerable<Shop> GetShops(string ShopName = "none") 
         {
@@ -57,6 +65,9 @@ namespace MagicItems.API.Controllers
             _dapper.ExecuteSql(sql, new { @ShopName = ShopName });
             return Ok();
         }
+
+        
+
     }
 
 }
