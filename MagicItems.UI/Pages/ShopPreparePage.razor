@@ -9,6 +9,7 @@
 @inject ShopItemService ShopItemService
 @inject CategoryService categoryService
 @inject RarityServicecs raritiesService
+@inject ShopService shopService
 @inject ItemsService itemService
 
 
@@ -99,7 +100,7 @@
                 </MudItem>
                 <MudItem>
                     <div class="px-3 py-6 mud-elevation-16 rounded-xl fixed" style="bottom:20px;right:20px;">
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Large">Create and Open Shop!</MudButton>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Medium" OnClick="async () => await CreateShop()">Create and Open Shop!</MudButton>
                     </div>               
                 </MudItem>
             </MudStack>
@@ -199,5 +200,42 @@
     {
         itemToShow = item;
     }
+
+    private async Task CreateShop()
+    {
+        await form.Validate();
+        if (form.IsValid)
+        {
+            bool nameIsFree = true;
+            var shops = await shopService.GetShopsAsync();
+            foreach (var item in shops)
+            {
+                if (item.ShopName == shopName)
+                {
+                    nameIsFree = false;
+                }
+            }
+
+            if (nameIsFree)
+            {
+                if (itemInShop.Count != 0)
+                {
+                    await shopService.AddShopAsync(new ShopDTO(shopName, shopOwner));
+                    await ShopItemService.AddItemListToShopAsync(shopName, itemInShop.ToArray());
+                    Snackbar.Add("Shop Created!", Severity.Success);
+                }
+                else
+                {
+                    Snackbar.Add("Fill shop with items!", Severity.Error);
+                }
+            }
+            else
+            {
+                Snackbar.Add("Shop like this already exists!", Severity.Error);
+            }
+
+           
+        }
+    } 
 
 }

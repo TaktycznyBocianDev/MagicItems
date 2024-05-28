@@ -36,7 +36,7 @@ namespace MagicItems.UI.Services
             {
                 var jsonContent = new StringContent(JsonSerializer.Serialize(shopName), Encoding.UTF8, "application/json");
 
-                HttpResponseMessage responseMessage = await _httpClient.PostAsync($"/ShopItemRelation/AddOneItemToShop/{shopName}/{itemName}", jsonContent);
+                HttpResponseMessage responseMessage = await _httpClient.PutAsync($"/ShopItemRelation/AddOneItemToShop/{shopName}/{itemName}", jsonContent);
                 responseMessage.EnsureSuccessStatusCode();
             }
             catch (HttpRequestException ex)
@@ -52,12 +52,12 @@ namespace MagicItems.UI.Services
             {
                 var jsonContent = new StringContent(JsonSerializer.Serialize(items), Encoding.UTF8, "application/json");
 
-                HttpResponseMessage responseMessage = await _httpClient.PostAsync($"/ShopItemRelation/AddItemListToShop/{shopName}", jsonContent);
+                HttpResponseMessage responseMessage = await _httpClient.PutAsync($"/ShopItemRelation/AddItemListToShop/{shopName}", jsonContent);
                 responseMessage.EnsureSuccessStatusCode();
             }
             catch (HttpRequestException ex)
             {
-                throw new HttpRequestException("Error adding one item to shop", ex);
+                throw new HttpRequestException("Error adding list of item to shop", ex);
             }
         }
 
@@ -67,7 +67,7 @@ namespace MagicItems.UI.Services
             {
                 var jsonContent = new StringContent(JsonSerializer.Serialize(items), Encoding.UTF8, "application/json");
 
-                HttpResponseMessage responseMessage = await _httpClient.PostAsync($"/ShopItemRelation/AddItemDTOsToShop/{shopName}", jsonContent);
+                HttpResponseMessage responseMessage = await _httpClient.PutAsync($"/ShopItemRelation/AddItemDTOsToShop/{shopName}", jsonContent);
                 responseMessage.EnsureSuccessStatusCode();
             }
             catch (HttpRequestException ex)
