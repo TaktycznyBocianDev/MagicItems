@@ -16,7 +16,7 @@ namespace MagicItems.UI.Services
             _httpClient = httpClient;
         }
 
-        public async Task<Items[]> GetShopsAsync(string shopName)
+        public async Task<Items[]> GetItemsInShop(string shopName)
         {
             try
             {

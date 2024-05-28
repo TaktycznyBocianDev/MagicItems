@@ -1,0 +1,70 @@
+﻿@page "/shopPage"
+
+@using MagicItems.Shared.Models
+@using MagicItems.UI.Services
+@using MagicItems.UI.ReusableComponents
+@using MudBlazor
+
+@inject ISnackbar Snackbar
+@inject ShopItemService ShopItemService
+@inject CategoryService categoryService
+@inject RarityServicecs raritiesService
+@inject ShopService shopService
+@inject ItemsService itemService
+    
+@if (shops is not null)
+{
+    <MudGrid Justify="Justify.FlexStart">
+        <MudItem sm="12" md="6" lg="5">
+            <div style="display: flex; align-items: center;">
+                <MudFab Href="/shopCreate" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Label="Add Item">Create new shop!</MudFab>
+            </div>
+            @foreach (var item in shops)
+            {
+                <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
+                    <div style="display: flex; align-items: center;">
+                        <MudStack Spacing="3">
+                            <MudText Typo="Typo.h4">@item.ShopName</MudText>
+                            <MudText Typo="Typo.h5">The owner of shop is: @item.ShopOwner</MudText>
+                        </MudStack>
+                        <MudIconButton OnClick="(async () => await DeleteShop(item.ShopName))" Icon="@Icons.Material.Filled.Delete" Title="Favorite" Color="@Color.Error" />
+                        
+                    </div>
+                </MudPaper>
+            }
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+<p>Loading...</p>
+}
+
+@code {
+    private Shop[]? shops;
+
+    private Items? shownItem;
+    private bool editingItem = false;
+    private bool addingItem = false;
+
+    private int editingItemId = 0;
+
+    private ItemsDTO itemToUpdate = new ItemsDTO();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadShops();
+    }
+
+    private async Task LoadShops()
+    {
+        shops = await shopService.GetShopsAsync();
+    }
+
+    private async Task DeleteShop(string shopName)
+    {
+        await shopService.DeleteShopAsync(shopName);
+        await LoadShops();
+    }
+
+}
