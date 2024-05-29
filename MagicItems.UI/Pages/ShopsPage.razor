@@ -61,6 +61,11 @@ else
         shops = await shopService.GetShopsAsync();
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadShops();
+    }
+
     private async Task DeleteShop(string shopName)
     {
         await shopService.DeleteShopAsync(shopName);
