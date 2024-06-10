@@ -11,13 +11,14 @@
 @inject RarityServicecs raritiesService
 @inject ShopService shopService
 @inject ItemsService itemService
+@inject NavigationManager navigationManager
     
 @if (shops is not null)
 {
     <MudGrid Justify="Justify.FlexStart">
         <MudItem sm="12" md="6" lg="5">
             <div style="display: flex; align-items: center;">
-                <MudFab Href="/shopCreate" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Label="Add Item">Create new shop!</MudFab>
+                <MudFab Href="/shopCreate" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Label="Create new shop!"></MudFab>
             </div>
             @foreach (var item in shops)
             {
@@ -27,11 +28,45 @@
                             <MudText Typo="Typo.h4">@item.ShopName</MudText>
                             <MudText Typo="Typo.h5">The owner of shop is: @item.ShopOwner</MudText>
                         </MudStack>
-                        <MudIconButton OnClick="(async () => await DeleteShop(item.ShopName))" Icon="@Icons.Material.Filled.Delete" Title="Favorite" Color="@Color.Error" />
-                        
+                        <div style="margin-left: auto;">
+                            <MudIconButton OnClick="(async () => await EditShop(item.ShopName))" Icon="@Icons.Material.Filled.Edit" Title="Favorite" Color="@Color.Primary" />
+                        <MudIconButton OnClick="(async () => await ShowShop(item))" Icon="@Icons.Material.Filled.RemoveRedEye" Title="Show Shop" Color="@Color.Primary" />
+                        <MudIconButton OnClick="(async () => await DeleteShop(item.ShopName))" Icon="@Icons.Material.Filled.Delete" Title="Delete" Color="@Color.Error" />
+                        </div>
                     </div>
                 </MudPaper>
             }
+        </MudItem>
+        <MudItem sm="12" md="6" lg="5">
+
+            @if (showShop)
+            {
+                <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
+                <MudText Typo="Typo.h5">@shopToShow.ShopName</MudText>
+                <MudText Typo="Typo.h6">The owner of shop is: @shopToShow.ShopOwner</MudText>
+                @foreach (var item in itemsToShow)
+                {
+                        <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
+                            <div style="display: flex; align-items: center;">
+                                <MudGrid>
+                                    <MudItem>
+                                        <MudText Typo="Typo.subtitle2"> @item.ItemName </MudText>
+                                    </MudItem>
+                                    <MudItem>
+                                        <MudText Typo="Typo.subtitle2"> @item.ShortDescription </MudText>
+                                    </MudItem>
+                                    <MudItem>
+                                        <MudText Typo="Typo.subtitle2"> Price: @item.Price </MudText>
+                                    </MudItem>
+                                                                  
+                                </MudGrid>
+                                
+                            </div>
+                        </MudPaper>
+                }
+                </MudPaper>
+            }
+
         </MudItem>
     </MudGrid>
 }
@@ -50,6 +85,10 @@ else
     private int editingItemId = 0;
 
     private ItemsDTO itemToUpdate = new ItemsDTO();
+
+    private bool showShop = false;
+    private Shop shopToShow = new Shop();
+    private List<Items> itemsToShow = new List<Items>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -70,6 +109,25 @@ else
     {
         await shopService.DeleteShopAsync(shopName);
         await LoadShops();
+        if (shopName == shopToShow.ShopName)
+        {
+            shopToShow = null;
+            itemsToShow = new List<Items>();
+            showShop = false;
+        }
+    }
+
+    private async Task ShowShop(Shop shop)
+    {
+        shopToShow = shop; 
+        var itemsFromShop = await ShopItemService.GetItemsInShop(shop.ShopName);
+        itemsToShow = itemsFromShop.ToList();
+        showShop = true;
+    }
+
+    private async Task EditShop(string shop)
+    {
+        navigationManager.NavigateTo($"/shopEdit/{shop}");
     }
 
 }
