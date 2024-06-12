@@ -1,5 +1,11 @@
 ﻿@page "/"
 
+@using MagicItems.Shared.Models
+@using MagicItems.UI.ReusableComponents
+
+<MudToggleIconButton @bind-Toggled="isEditing" Icon="@Icons.Material.Filled.Edit" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.RemoveRedEye" ToggledColor="Color.Inherit" />
+<BoardItem Item="item" IsEditing="isEditing"></BoardItem>
+
 <h3>Section 1</h3>
 <p>This is the content of the first section.</p>
 
@@ -15,5 +21,6 @@
 
 
 @code {
-
+    public Items item = new Items();
+    public bool isEditing = false;
 }
