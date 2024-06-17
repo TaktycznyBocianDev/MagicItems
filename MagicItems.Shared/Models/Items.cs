@@ -2,6 +2,7 @@ namespace MagicItems.Shared.Models
 {
     public partial class Items
     {
+
         public int Id { get; set; }
         public string ItemName { get; set; } = "New Item";
         public string ShortDescription { get; set; } = "Short Desc of new item";
