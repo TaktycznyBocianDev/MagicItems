@@ -1,0 +1,8 @@
+﻿.board-item {
+    background-color: #D2B48C;
+    border: 2px solid #8B4513;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}

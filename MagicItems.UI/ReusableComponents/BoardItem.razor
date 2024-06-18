@@ -1,26 +1,31 @@
 ﻿@using MagicItems.Shared.Models
 @using MudBlazor
 
+<div class="board-item">
 <MudPaper Class="board-item pa-3 ma-3">
+ 
     <MudGrid Justify="Justify.SpaceEvenly">
-        @if (IsEditing)
-        {
-            <MudTextField @bind-Value="Item.ItemName" Label="Item Name" Variant="Variant.Outlined" />
-            <MudTextField @bind-Value="Item.CategoryName" Label="Category" Variant="Variant.Outlined" />
-            <MudTextField @bind-Value="Item.Price" Label="Price" Variant="Variant.Outlined" />
-            <MudIconButton OnClick="async () => await AddToPrice()" Icon="@Icons.Material.Filled.Add" aria-label="Add 100 to price" />
-            <MudIconButton OnClick="async () => await SubtractFromPrice()" Icon="@Icons.Material.Filled.Remove" aria-label="Subtract 100 from price" />
-            <MudTextField @bind-Value="Item.RarityName" Label="Rarity" Variant="Variant.Outlined" />
-        }
-        else
-        {
-            <MudText Typo="Typo.h6">@Item.ItemName</MudText>
-            <MudText Typo="Typo.h6">Category: @Item.CategoryName</MudText>
-            <MudText Typo="Typo.h6">Price: @Item.Price</MudText>
-            <MudText Typo="Typo.h6">Rarity: @Item.RarityName</MudText>
-        }
+        
+            @if (IsEditing)
+            {
+                <MudTextField @bind-Value="Item.ItemName" Label="Item Name" Variant="Variant.Outlined" />
+                <MudTextField @bind-Value="Item.CategoryName" Label="Category" Variant="Variant.Outlined" />
+                <MudTextField @bind-Value="Item.Price" Label="Price" Variant="Variant.Outlined" />
+                <MudIconButton OnClick="async () => await AddToPrice()" Icon="@Icons.Material.Filled.Add" aria-label="Add 100 to price" />
+                <MudIconButton OnClick="async () => await SubtractFromPrice()" Icon="@Icons.Material.Filled.Remove" aria-label="Subtract 100 from price" />
+                <MudTextField @bind-Value="Item.RarityName" Label="Rarity" Variant="Variant.Outlined" />
+            }
+            else
+            {
+                <MudText Typo="Typo.h6">@Item.ItemName</MudText>
+                <MudText Typo="Typo.h6">Category: @Item.CategoryName</MudText>
+                <MudText Typo="Typo.h6">Price: @Item.Price</MudText>
+                <MudText Typo="Typo.h6">Rarity: @Item.RarityName</MudText>
+            }
+              
     </MudGrid>
 </MudPaper>
+</div>
 
 @code {
     [Parameter]

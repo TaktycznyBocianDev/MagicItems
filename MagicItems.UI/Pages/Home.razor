@@ -4,35 +4,7 @@
 @using MagicItems.UI.ReusableComponents
 
 <MudToggleIconButton @bind-Toggled="isEditing" Icon="@Icons.Material.Filled.Edit" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.RemoveRedEye" ToggledColor="Color.Inherit" />
-<Board Items="itemList" IsEditing="isEditing" />
-
-@page "/board"
-
-<div class="board-container">
-    <div class="board-item">
-        Item 1
-    </div>
-    <div class="board-item">
-        Item 2
-    </div>
-    <div class="board-item">
-        Item 3
-    </div>
-</div>
-
-
-
-
-
-<div style="margin: 20px 0;"></div>
-
-
-
-<div style="margin: 20px 0;"></div>
-
-<h3>Section 3</h3>
-<p>This is the content of the third section.</p>
-
+<Board Items="itemList" IsEditing="isEditing"/>
 
 @code {
     public List<Items> itemList = new List<Items>();
@@ -44,5 +16,6 @@
         itemList.Add(new Items());
         itemList.Add(new Items());
         itemList.Add(new Items());
+        
     }
 }

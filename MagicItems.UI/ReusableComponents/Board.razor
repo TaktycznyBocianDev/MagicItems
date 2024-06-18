@@ -1,16 +1,19 @@
 ﻿@using MagicItems.Shared.Models
 @using MudBlazor
 
-@* Board.razor *@
-
-    <MudContainer MaxWidth="MaxWidth.Medium" Class="board-container">
+<div >
+    <MudContainer MaxWidth="MaxWidth.Medium">
         <MudPaper>
-            @foreach (var item in Items)
-            {
-                <BoardItem Item="item" IsEditing="IsEditing" />
-            }
+                <div class="board-container">
+                    @foreach (var item in Items)
+                    {
+                        <BoardItem Item="item" IsEditing="IsEditing" />
+                    }
+                </div>           
         </MudPaper>
     </MudContainer>
+</div>
+    
 
     
 
@@ -22,6 +25,8 @@
     public List<Items> Items { get; set; } = new List<Items>();
     [Parameter]
     public bool IsEditing { get; set; }
+    [Parameter]
+    public string Style { get; set; } = string.Empty;
 
 }
 
