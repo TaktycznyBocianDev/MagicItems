@@ -1,0 +1,20 @@
+﻿
+.custom-card {
+    border: 2px solid black; /* Black border */
+    background-color: white; /* White background */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add subtle shadow for depth */
+    padding: 10px; /* Optional: Add padding inside the card */
+    margin-bottom: 20px; /* Optional: Add space below the card */
+}
+
+.price-section {
+    border: 2px solid gold; /* Gold border */
+    border-radius: 5px; /* Optional: Add rounded corners to the price section */
+    padding: 5px; /* Optional: Add padding inside the price section */
+    margin-top: 10px; /* Optional: Add space above the price section */
+    background-color: #fffbe6; /* Optional: Slight background color to highlight the section */
+}
+
+
+

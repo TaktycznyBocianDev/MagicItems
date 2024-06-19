@@ -5,6 +5,7 @@
 
 <MudToggleIconButton @bind-Toggled="isEditing" Icon="@Icons.Material.Filled.Edit" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.RemoveRedEye" ToggledColor="Color.Inherit" />
 <Board Items="itemList" IsEditing="isEditing"/>
+<ItemDisplayComponent Item="@itemList[0]"></ItemDisplayComponent>
 
 @code {
     public List<Items> itemList = new List<Items>();

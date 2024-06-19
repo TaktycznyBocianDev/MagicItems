@@ -1,33 +1,38 @@
 ﻿@using MagicItems.Shared.Models
 
-@if(Item is null)
+@if (Item is null)
 {
-    
 }
 else
 {
-    <MudCard>
-        <MudCardHeader>
-            <CardHeaderContent>
-
-                <MudGrid Justify="Justify.SpaceEvenly">
-                    <MudText Typo="Typo.h4">@Item.ItemName</MudText>
-                    <MudText Typo="Typo.h5">Rarity: @Item.RarityName</MudText>
-                </MudGrid>
-            </CardHeaderContent>
-        </MudCardHeader>
-        <MudCardContent>
-            <MudText Typo="Typo.body2">@Item.LongDescription</MudText>
-        </MudCardContent>
-        <MudCardContent>
-            <MudGrid Justify="Justify.SpaceAround">
-                <MudText Typo="Typo.body2">Price: @Item.Price</MudText>
-                <MudText Typo="Typo.body2">Category: @Item.CategoryName</MudText>
-            </MudGrid>
-        </MudCardContent>
-    </MudCard>
+    <MudGrid Justify="Justify.FlexStart">
+        <MudItem xs="12" sm="4">    
+            <div class="custom-card">
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudGrid Justify="Justify.SpaceEvenly">
+                                <MudText Typo="Typo.h4">@Item.ItemName</MudText>
+                                <MudText Typo="Typo.h5">Rarity: @Item.RarityName</MudText>
+                            </MudGrid>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Typo="Typo.body2">@Item.LongDescription</MudText>
+                    </MudCardContent>
+                    <MudCardContent>
+                        <MudGrid Justify="Justify.SpaceAround">
+                            <div class="price-section">
+                                <MudText Typo="Typo.body2">Price: @Item.Price</MudText>
+                            </div>
+                            <MudText Typo="Typo.body2">Category: @Item.CategoryName</MudText>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </div>
+        </MudItem>
+    </MudGrid>
 }
-
 
 @code {
     [Parameter] public Items? Item { get; set; }
