@@ -16,5 +16,15 @@
     background-color: #fffbe6; /* Optional: Slight background color to highlight the section */
 }
 
+/* Flexbox centering for vertical alignment */
+.centered-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    height: 100%; /* Ensures the card takes full available height */
+    text-align: center; /* Center text within the elements */
+}
+
 
 

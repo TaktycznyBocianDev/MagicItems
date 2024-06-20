@@ -1,5 +1,9 @@
 ﻿@using MagicItems.Shared.Models
+@using MagicItems.UI.Services
 @using MudBlazor
+
+@inject CategoryService categoryService
+@inject RarityServicecs raritiesService
 
 <div >
     <MudContainer MaxWidth="MaxWidth.Medium">
@@ -7,7 +11,7 @@
                 <div class="board-container">
                     @foreach (var item in Items)
                     {
-                        <BoardItem Item="item" IsEditing="IsEditing" />
+                    <BoardItem Item="item" IsEditing="IsEditing" CategoryList="@CategoryList" RarityList="@RarityList" OnShowDetails="OnItemSelected" />
                     }
                 </div>           
         </MudPaper>
@@ -25,6 +29,30 @@
     public List<Items> Items { get; set; } = new List<Items>();
     [Parameter]
     public bool IsEditing { get; set; }
+    [Parameter]
+    public List<Category> CategoryList { get; set; } = new List<Category>();
+    [Parameter]
+    public List<Rarities> RarityList { get; set; } = new List<Rarities>();
+    [Parameter] 
+    public EventCallback<Items> OnItemSelected { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategories();
+        await LoadRarities();
+    }
+
+    private async Task LoadCategories()
+    {
+        var categoryList = await categoryService.GetCategoriesAsync();
+        CategoryList = categoryList.ToList();
+    }
+
+    private async Task LoadRarities()
+    {
+        var rarityList = await raritiesService.GetRaritiesAsync();
+        RarityList = rarityList.ToList();
+    }
 
 }
 

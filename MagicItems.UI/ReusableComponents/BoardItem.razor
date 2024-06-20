@@ -2,18 +2,29 @@
 @using MudBlazor
 
 <div class="board-item">
-<MudPaper Class="board-item pa-3 ma-3">
- 
-    <MudGrid Justify="Justify.SpaceEvenly">
-        
+    <MudPaper Class="board-item pa-3 ma-3">
+
+        <MudGrid Justify="Justify.SpaceEvenly">
+
             @if (IsEditing)
             {
                 <MudTextField @bind-Value="Item.ItemName" Label="Item Name" Variant="Variant.Outlined" />
-                <MudTextField @bind-Value="Item.CategoryName" Label="Category" Variant="Variant.Outlined" />
+                <MudSelect @bind-Value="Item.CategoryName" Required="true" T="string" Label="Rarities" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Rarity is required!">
+                    @foreach (var category in CategoryList)
+                    {
+                        <MudSelectItem Value="@(category.CategoryName)" />
+                    }
+                </MudSelect>
                 <MudTextField @bind-Value="Item.Price" Label="Price" Variant="Variant.Outlined" />
                 <MudIconButton OnClick="async () => await AddToPrice()" Icon="@Icons.Material.Filled.Add" aria-label="Add 100 to price" />
                 <MudIconButton OnClick="async () => await SubtractFromPrice()" Icon="@Icons.Material.Filled.Remove" aria-label="Subtract 100 from price" />
                 <MudTextField @bind-Value="Item.RarityName" Label="Rarity" Variant="Variant.Outlined" />
+                <MudSelect @bind-Value="Item.RarityName" Required="true" T="string" Label="Rarities" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Rarity is required!">
+                    @foreach (var rarity in RarityList)
+                    {
+                        <MudSelectItem Value="@(rarity.RarityName)" />
+                    }
+                </MudSelect>
             }
             else
             {
@@ -21,11 +32,11 @@
                 <MudText Typo="Typo.h6">Category: @Item.CategoryName</MudText>
                 <MudText Typo="Typo.h6">Price: @Item.Price</MudText>
                 <MudText Typo="Typo.h6">Rarity: @Item.RarityName</MudText>
-                <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="See item" Size="Size.Small"></MudIconButton>
+                <MudIconButton OnClick="@(() => ShowItemDetails(Item))" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="See item" Size="Size.Small"></MudIconButton>
             }
-              
-    </MudGrid>
-</MudPaper>
+
+        </MudGrid>
+    </MudPaper>
 </div>
 
 @code {
@@ -33,7 +44,23 @@
     public Items Item { get; set; }
 
     [Parameter]
-    public bool IsEditing { get; set; } 
+    public bool IsEditing { get; set; }
+
+    //Get those from board
+    [Parameter]
+    public List<Category> CategoryList { get; set; } = new List<Category>();
+    [Parameter]
+    public List<Rarities> RarityList { get; set; } = new List<Rarities>();
+
+    [Parameter] public EventCallback<Items> OnShowDetails { get; set; }
+
+    private void ShowItemDetails(Items? item)
+    {
+        if (item != null)
+        {
+            OnShowDetails.InvokeAsync(item);
+        }
+    }
 
     private async Task AddToPrice()
     {

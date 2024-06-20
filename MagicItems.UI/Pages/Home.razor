@@ -3,20 +3,49 @@
 @using MagicItems.Shared.Models
 @using MagicItems.UI.ReusableComponents
 
-<MudToggleIconButton @bind-Toggled="isEditing" Icon="@Icons.Material.Filled.Edit" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.RemoveRedEye" ToggledColor="Color.Inherit" />
-<Board Items="itemList" IsEditing="isEditing"/>
-<ItemDisplayComponent Item="@itemList[0]"></ItemDisplayComponent>
+<MudStack>
+    <MudToggleIconButton @bind-Toggled="isEditing" Icon="@Icons.Material.Filled.Edit" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.RemoveRedEye" ToggledColor="Color.Inherit" />
+    <Board Items="itemList" IsEditing="isEditing" OnItemSelected="HandleItemSelected" />
+
+    
+    @if (selectedItems.Any() && !isEditing)
+    {
+        <MudGrid Justify="Justify.FlexStart">
+            @foreach (var item in selectedItems)
+            {
+                <MudItem>
+                    <ItemDisplayComponent Item="item" />
+                </MudItem>
+                
+            }
+        </MudGrid>
+        
+
+    }
+
+</MudStack>
+
+
+
+
+
 
 @code {
-    public List<Items> itemList = new List<Items>();
+    private List<Items> itemList = new List<Items>
+    {
+        new Items { ItemName = "Magic Sword", RarityName = "Rare", LongDescription = "A sword with magical powers", Price = 500, CategoryName = "Weapon" },
+        new Items { ItemName = "Healing Potion", RarityName = "Common", LongDescription = "A potion that heals wounds", Price = 50, CategoryName = "Potion" }
+
+    };
+
     public bool isEditing = false;
 
-    protected override async Task OnInitializedAsync()
+    private List<Items> selectedItems = new List<Items>();
+
+    private void HandleItemSelected(Items item)
     {
-        itemList.Add(new Items());
-        itemList.Add(new Items());
-        itemList.Add(new Items());
-        itemList.Add(new Items());
-        
+        selectedItems.Add(item);
     }
+
+
 }

@@ -6,27 +6,27 @@
 else
 {
     <MudGrid Justify="Justify.FlexStart">
-        <MudItem xs="12" sm="4">    
+        <MudItem>    
             <div class="custom-card">
-                <MudCard>
+                <MudCard >
                     <MudCardHeader>
                         <CardHeaderContent>
-                            <MudGrid Justify="Justify.SpaceEvenly">
-                                <MudText Typo="Typo.h4">@Item.ItemName</MudText>
+                            <MudStack AlignItems="AlignItems.Center">
+                                <MudText Typo="Typo.h2">@Item.ItemName</MudText>
                                 <MudText Typo="Typo.h5">Rarity: @Item.RarityName</MudText>
-                            </MudGrid>
+                            </MudStack>
                         </CardHeaderContent>
                     </MudCardHeader>
                     <MudCardContent>
                         <MudText Typo="Typo.body2">@Item.LongDescription</MudText>
                     </MudCardContent>
                     <MudCardContent>
-                        <MudGrid Justify="Justify.SpaceAround">
+                        <MudStack AlignItems="AlignItems.Center">
                             <div class="price-section">
                                 <MudText Typo="Typo.body2">Price: @Item.Price</MudText>
                             </div>
                             <MudText Typo="Typo.body2">Category: @Item.CategoryName</MudText>
-                        </MudGrid>
+                        </MudStack>
                     </MudCardContent>
                 </MudCard>
             </div>
