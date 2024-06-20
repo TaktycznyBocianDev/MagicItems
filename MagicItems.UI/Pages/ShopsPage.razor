@@ -30,8 +30,11 @@
                         </MudStack>
                         <div style="margin-left: auto;">
                             <MudIconButton OnClick="(async () => await EditShop(item.ShopName))" Icon="@Icons.Material.Filled.Edit" Title="Favorite" Color="@Color.Primary" />
-                        <MudIconButton OnClick="(async () => await ShowShop(item))" Icon="@Icons.Material.Filled.RemoveRedEye" Title="Show Shop" Color="@Color.Primary" />
-                        <MudIconButton OnClick="(async () => await DeleteShop(item.ShopName))" Icon="@Icons.Material.Filled.Delete" Title="Delete" Color="@Color.Error" />
+                            <MudIconButton OnClick="(async () => await ShowShop(item))" Icon="@Icons.Material.Filled.RemoveRedEye" Title="Show Shop" Color="@Color.Primary" />
+                            <MudIconButton OnClick="(async () => await DeleteShop(item.ShopName))" Icon="@Icons.Material.Filled.Delete" Title="Delete" Color="@Color.Error" />
+
+                            <MudButton OnClick="(async () => await GoToShopPage(item.ShopName))" Variant="Variant.Filled" Color="Color.Primary">Go to shop page -></MudButton>
+                            
                         </div>
                     </div>
                 </MudPaper>
@@ -128,6 +131,11 @@ else
     private async Task EditShop(string shop)
     {
         navigationManager.NavigateTo($"/shopEdit/{shop}");
+    }
+    
+    private async Task GoToShopPage(string shop)
+    {
+        navigationManager.NavigateTo($"/shopMain/{shop}");
     }
 
 }

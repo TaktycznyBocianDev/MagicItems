@@ -11,7 +11,7 @@
                 <div class="board-container">
                     @foreach (var item in Items)
                     {
-                    <BoardItem Item="item" IsEditing="IsEditing" CategoryList="@CategoryList" RarityList="@RarityList" OnShowDetails="OnItemSelected" />
+                    <BoardItem Item="item" IsEditing="IsEditing" CategoryList="@CategoryList" RarityList="@RarityList" OnShowDetails="OnItemSelected" OnSellItem="OnSellItem" />
                     }
                 </div>           
         </MudPaper>
@@ -35,6 +35,8 @@
     public List<Rarities> RarityList { get; set; } = new List<Rarities>();
     [Parameter] 
     public EventCallback<Items> OnItemSelected { get; set; }
+    [Parameter]
+    public EventCallback<Items> OnSellItem { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

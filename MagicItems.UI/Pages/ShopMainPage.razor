@@ -1,0 +1,92 @@
+﻿@page "/shopMain/{ShopToShowName}"
+
+@using MagicItems.Shared.Models
+@using MagicItems.UI.ReusableComponents
+@using MagicItems.UI.Services
+
+@inject ShopService shopService
+@inject ShopItemService shopItemService
+
+<MudStack>
+
+    <div class="centered-container">
+        <MudText Typo="Typo.h3">Shop Name: @ShopToShowName </MudText>
+        @if (ShopToShow.ShopOwner != "")
+        {
+            <MudText Typo="Typo.h4">Owner of this shop is: @ShopToShow.ShopOwner </MudText>
+        }
+        <MudDivider DividerType="DividerType.Middle" Class="my-6" />
+    </div>
+
+
+    <Board Items="itemInShopList" IsEditing="isEditing" OnItemSelected="HandleItemSelected" OnSellItem="OnSellItem" />
+
+
+    @if (selectedItems.Any() && !isEditing)
+    {
+        <MudGrid Justify="Justify.FlexStart">
+            @foreach (var item in selectedItems)
+            {
+                <MudItem>
+                    <ItemDisplayComponent Item="item" />
+                </MudItem>
+
+            }
+        </MudGrid>
+    }
+
+</MudStack>
+<div class="px-2 py-2 mud-elevation-3 rounded-xl fixed" style="background-color: white; bottom:20px;right:20px;">
+    <MudToggleIconButton @bind-Toggled="isEditing" Icon="@Icons.Material.Filled.Edit" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.RemoveRedEye" ToggledColor="Color.Inherit" />
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public string ShopToShowName { get; set; }
+
+    private Shop ShopToShow = new Shop();
+    private List<Items> itemInShopList = new List<Items>();
+
+    public bool isEditing = false;
+
+    private List<Items> selectedItems = new List<Items>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetShopToEdit();
+        await LoadItemsInShop();
+    }
+
+    private async Task GetShopToEdit()
+    {
+        var shopList = await shopService.GetShopsAsync(ShopToShowName);
+        ShopToShow = shopList[0];
+    }
+
+    private async Task LoadItemsInShop()
+    {
+        var itemsFromShop = await shopItemService.GetItemsInShop(ShopToShow.ShopName);
+        itemInShopList = itemsFromShop.ToList();
+    }
+
+
+    private void HandleItemSelected(Items item)
+    {
+        if (selectedItems.Contains(item))
+        {
+            selectedItems.Remove(item);
+        }
+        else selectedItems.Add(item);
+    }
+
+    private void OnSellItem(Items item)
+    {
+        selectedItems.Remove(item);
+        itemInShopList.Remove(item);
+    }
+
+
+}

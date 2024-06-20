@@ -18,7 +18,6 @@
                 <MudTextField @bind-Value="Item.Price" Label="Price" Variant="Variant.Outlined" />
                 <MudIconButton OnClick="async () => await AddToPrice()" Icon="@Icons.Material.Filled.Add" aria-label="Add 100 to price" />
                 <MudIconButton OnClick="async () => await SubtractFromPrice()" Icon="@Icons.Material.Filled.Remove" aria-label="Subtract 100 from price" />
-                <MudTextField @bind-Value="Item.RarityName" Label="Rarity" Variant="Variant.Outlined" />
                 <MudSelect @bind-Value="Item.RarityName" Required="true" T="string" Label="Rarities" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Rarity is required!">
                     @foreach (var rarity in RarityList)
                     {
@@ -28,11 +27,23 @@
             }
             else
             {
+                
                 <MudText Typo="Typo.h6">@Item.ItemName</MudText>
                 <MudText Typo="Typo.h6">Category: @Item.CategoryName</MudText>
                 <MudText Typo="Typo.h6">Price: @Item.Price</MudText>
                 <MudText Typo="Typo.h6">Rarity: @Item.RarityName</MudText>
-                <MudIconButton OnClick="@(() => ShowItemDetails(Item))" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="See item" Size="Size.Small"></MudIconButton>
+                @if (itemVisible)
+                {
+                    <MudIconButton OnClick="@(() => SendItemDetails(Item))" Icon="@Icons.Material.Outlined.RemoveRedEye" Color="Color.Primary" aria-label="See item" Size="Size.Small"></MudIconButton>
+                }
+                else
+                {
+                    <MudIconButton OnClick="@(() => SendItemDetails(Item))" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="See item" Size="Size.Small"></MudIconButton>
+                }
+                <MudButton OnClick="@(() => SellItem(Item))" Variant="Variant.Filled" Color="Color.Success">Sell</MudButton>
+                
+               
+                
             }
 
         </MudGrid>
@@ -52,13 +63,29 @@
     [Parameter]
     public List<Rarities> RarityList { get; set; } = new List<Rarities>();
 
-    [Parameter] public EventCallback<Items> OnShowDetails { get; set; }
+    [Parameter] 
+    public EventCallback<Items> OnShowDetails { get; set; }
+    [Parameter]
+    public EventCallback<Items> OnSellItem { get; set; }
 
-    private void ShowItemDetails(Items? item)
+
+    private bool itemVisible = true;
+
+    private void SendItemDetails(Items? item)
     {
         if (item != null)
         {
             OnShowDetails.InvokeAsync(item);
+        }
+        itemVisible = !itemVisible;
+
+    }
+
+    private void SellItem(Items? item)
+    {
+        if (item != null)
+        {
+            OnSellItem.InvokeAsync(item);
         }
     }
 
