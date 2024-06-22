@@ -2,13 +2,19 @@
 @using MagicItems.UI.Services
 
 @inject CategoryService categoryService
-<MudGrid>
-    <MudTextField @bind-Value="@categoryDTO.CategoryName" Label="Name for new category" Variant="Variant.Outlined" Class="custom-text-field" Required="true"></MudTextField>
-    <MudButton OnClick="@(() => CreateCategory(categoryDTO))" Variant="Variant.Filled" Color="Color.Primary">Create new Category!</MudButton>
+
+<MudGrid Justify="Justify.FlexStart">
+    <MudItem xs="12" md="4">
+        <MudTextField @bind-Value="@categoryDTO.CategoryName" Label="Name for new category" Variant="Variant.Outlined" Class="custom-text-field" Required="true" Clearable="true"></MudTextField>
+    </MudItem>
+    <MudItem xs="12" md="6">
+        <MudButton OnClick="@(() => CreateCategory(categoryDTO))" Size="Size.Large" Variant="Variant.Filled" Style="background-color: #654321; color: white;  width: 200px; height: 60px;" StartIcon="@Icons.Material.Filled.Add">
+                Create new Category!
+            </MudButton>
+    </MudItem>
 </MudGrid>
 
 @code {
-
     [Parameter]
     public EventCallback<CategoryDTO> CreateNewCategory { get; set; }
 
@@ -16,15 +22,9 @@
 
     private void CreateCategory(CategoryDTO? categoryDTO)
     {
-        if (categoryDTO != null)
+        if (categoryDTO != null && !string.IsNullOrWhiteSpace(categoryDTO.CategoryName))
         {
             CreateNewCategory.InvokeAsync(categoryDTO);
         }
-        else
-        {
-            
-        }
-
     }
-
 }
