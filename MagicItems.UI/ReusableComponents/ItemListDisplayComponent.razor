@@ -1,0 +1,53 @@
+﻿@using MagicItems.Shared.Models
+
+
+<MudItem sm="12" md="7" lg="7">  
+    @foreach (var item in ItemsList)
+    {
+        <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
+            <div style="display: flex; align-items: center;">
+                <MudText Typo="Typo.h4">@item.ItemName</MudText>
+                <div style="margin-left: auto;">
+                    <MudButton OnClick="@(() => WhenShowSwitch(item))" Variant="Variant.Filled" Style="background-color: cornflowerblue; color: white;" EndIcon="@Icons.Material.Filled.RemoveRedEye" >Show</MudButton>
+                    <MudButton OnClick="@(() => WhenEditSwitch(item.Id, item))" Variant="Variant.Filled" Style="background-color: darkorange; color: white;" EndIcon="@Icons.Material.Filled.Edit">Edit</MudButton>
+                    <MudButton OnClick="@(() => WhenDeleteItem(item.ItemName))" Variant="Variant.Filled" Style="background-color: red; color: white;" EndIcon="@Icons.Material.Filled.Delete">Delete</MudButton>
+                </div>
+            </div>
+        </MudPaper>
+    }
+</MudItem>
+
+@code {
+
+    [Parameter]
+    public Items[]? ItemsList { get; set; }
+
+    [Parameter]
+    public EventCallback<Items> EditSwitch { get; set; }
+    [Parameter]
+    public EventCallback<Items> ShowSwitch { get; set; }
+    [Parameter]
+    public EventCallback<string> DeleteItem { get; set; }
+
+    private void WhenShowSwitch(Items? item)
+    {
+        if (item != null)
+        {
+            ShowSwitch.InvokeAsync(item);
+        }
+    }
+    private void WhenEditSwitch(int itemId, Items item)
+    {
+        if (item != null)
+        {
+            EditSwitch.InvokeAsync(item);
+        }
+    }
+    private void WhenDeleteItem(string itemName)
+    {
+        if (itemName != null)
+        {
+            DeleteItem.InvokeAsync(itemName);
+        }
+    }
+}

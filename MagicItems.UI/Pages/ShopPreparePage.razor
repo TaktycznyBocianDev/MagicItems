@@ -33,7 +33,7 @@
                         <MudText Typo="Typo.h4">
                             Add items to shop:
 
-                            <ItemFilter OnFilterApplied="HandleFilterApplied"></ItemFilter>
+                            <ItemFilter OnFilterApplied="HandleFilterApplied" Row="false"></ItemFilter>
                             @foreach (var item in itemsListToPick)
                             {
                                 <MudPaper Class="pa-3 align-baseline" Elevation="5" Outlined="true" Square="true">

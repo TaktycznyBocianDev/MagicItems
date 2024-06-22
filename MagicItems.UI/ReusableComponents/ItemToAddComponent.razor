@@ -5,38 +5,43 @@
 @inject RarityServicecs raritiesService
 
 <MudItem xs="12" sm="7">
-    <MudPaper Class="pa-4">
-        <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
-            <MudTextField @bind-Value="NewItem.ItemName" T="string" Label="Item Name" Required="true" RequiredError="Item name is required!" />
-            <MudSelect @bind-Value="NewItem.CategoryName" Required="true" T="string" Label="Categories" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Category Name is required!">
-                @foreach (var item in CategoryList)
-                {
-                    <MudSelectItem Value="@(item.CategoryName)" />
-                }
-            </MudSelect>
-            <MudTextField @bind-Value="NewItem.ShortDescription" T="string" HelperText="Max. 50 characters" Label="Short Description" Required="true" RequiredError="Short description is required!" />
-            <MudTextField @bind-Value="NewItem.LongDescription" T="string" Label="Long Description" Required="true" RequiredError="Long description is required!" />
-            <MudNumericField Required="true" @bind-Value="NewItem.Price" Label="Price" Variant="Variant.Outlined" RequiredError="Price is required!" />
-            <MudSelect @bind-Value="NewItem.RarityName" Required="true" T="string" Label="Rarities" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Rarity is required!">
-                @foreach (var rarity in RarityList)
-                {
-                    <MudSelectItem Value="@(rarity.RarityName)" />
-                }
-            </MudSelect>
-        </MudForm>
-        <MudButton Variant="Variant.Filled" Color="Color.Dark" DisableElevation="true" OnClick="@(OnEscape)">Cancel</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true" OnClick="@(async () => await AddItem())">Add item</MudButton>
+    <div class="addItem-style">
+        <MudStack Spacing="3">
+            <MudPaper Class="pa-4">
+                <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                    <MudTextField @bind-Value="NewItem.ItemName" T="string" Label="Item Name" Required="true" RequiredError="Item name is required!" Counter="50" MaxLength="50" />
+                    <MudSelect @bind-Value="NewItem.CategoryName" Required="true" T="string" Label="Categories" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Category Name is required!">
+                        @foreach (var item in CategoryList)
+                        {
+                            <MudSelectItem Value="@(item.CategoryName)" />
+                        }
+                    </MudSelect>
+                    <MudTextField @bind-Value="NewItem.ShortDescription" T="string" Counter="50" MaxLength="50" Label="Short Description" Required="true" AutoGrow RequiredError="Short description is required!" />
+                    <MudTextField @bind-Value="NewItem.LongDescription" T="string" Label="Long Description" Required="true" RequiredError="Long description is required!" AutoGrow />
+                    <MudNumericField Required="true" @bind-Value="NewItem.Price" Label="Price" Variant="Variant.Outlined" RequiredError="Price is required!" />
+                    <MudSelect @bind-Value="NewItem.RarityName" Required="true" T="string" Label="Rarities" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter" RequiredError="Rarity is required!">
+                        @foreach (var rarity in RarityList)
+                        {
+                            <MudSelectItem Value="@(rarity.RarityName)" />
+                        }
+                    </MudSelect>
+                </MudForm>
+                <MudButton Variant="Variant.Filled" Style="background-color: red; color: white;" EndIcon="@Icons.Material.Filled.Cancel" DisableElevation="true" OnClick="@(OnEscape)">Cancel</MudButton>
+                <MudButton Variant="Variant.Filled" Style="background-color: green; color: white;" EndIcon="@Icons.Material.Filled.Add" DisableElevation="true" OnClick="@(async () => await AddItem())">Add item</MudButton>
 
-        @if (errors.Any())
-        {
-            <MudAlert Severity="Severity.Error" Variant="Variant.Filled">
-                @foreach (var error in errors)
+                @if (errors.Any())
                 {
-                    <p>@error</p>
+                    <MudAlert Severity="Severity.Error" Variant="Variant.Filled">
+                        @foreach (var error in errors)
+                        {
+                            <p>@error</p>
+                        }
+                    </MudAlert>
                 }
-            </MudAlert>
-        }
-    </MudPaper>
+            </MudPaper>
+        </MudStack>  
+    </div>
+    
 </MudItem>
 
 @code {
