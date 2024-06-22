@@ -77,6 +77,33 @@ public class ItemController : ControllerBase
         return Ok();
     }
 
+    [HttpPost("AddListOfItems")]
+    public IActionResult AddListOfItems(ItemsDTO[] itemsToAdd)
+    {
+        foreach (ItemsDTO item in itemsToAdd)
+        {
+            string sql = @"EXEC AddItem 
+                   @ItemName = @ItemName, 
+                   @ShortDescription = @ShortDescription, 
+                   @LongDescription = @LongDescription, 
+                   @Price = @Price, 
+                   @CategoryName = @CategoryName,
+                   @RarityName = @RarityName";
+
+            _dapper.ExecuteSql(sql, new
+            {
+                ItemName = item.ItemName,
+                ShortDescription = item.ShortDescription,
+                LongDescription = item.LongDescription,
+                Price = item.Price,
+                @CategoryName = item.CategoryName,
+                @RarityName = item.RarityName
+
+            });
+        }
+        return Ok();
+    }
+
     [HttpDelete("DeleteItem/{itemName}")]
     public IActionResult DeleteItem(string itemName)
     {

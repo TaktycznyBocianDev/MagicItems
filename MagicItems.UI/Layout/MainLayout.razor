@@ -1,45 +1,38 @@
-﻿@using MudBlazor
+﻿@page "/"
+@using MudBlazor
 @inherits LayoutComponentBase
 
-<MudThemeProvider IsDarkMode="darkMode" />
+<MudThemeProvider IsDarkMode="false" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="0">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="(() => ToogleDrawer())"/>
-            <MudText Typo ="Typo.h5" Class="ml-3">Blazor ToDo</MudText>
-            <MudSpacer/>
-        <MudToggleIconButton @bind-Toggled="darkMode" Icon="@Icons.Material.Filled.LightMode" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.DarkMode" ToggledColor="Color.Inherit" />
-    </MudAppBar>
-    <MudDrawer @bind-Open="drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0">
-        <MudNavMenu>
-            <MudNavLink Href="/shopPage" Match="NavLinkMatch.All">See Shops</MudNavLink>
-            <MudNavLink Href="/shopCreate" Match="NavLinkMatch.All">Shop Creation</MudNavLink>
-            <MudNavLink Href="/categories" Match="NavLinkMatch.All">Categories</MudNavLink>
-            <MudNavLink Href="/items" Match="NavLinkMatch.All">Items</MudNavLink>
-
-        </MudNavMenu>
-    </MudDrawer>
     <MudMainContent>
         @Body
     </MudMainContent>
+
+    <MudAppBar Elevation="4" Class="mt-auto" Style="background-color: #654321; color: white;">
+
+        <MudSpacer />
+
+        <MudButton Href="/shopPage" StartIcon="@Icons.Material.Filled.Storefront" Color="Color.Inherit" Class="mx-2" Variant="Variant.Text" Style="color: white;">
+            See Shops
+        </MudButton>
+        <MudButton Href="/shopCreate" StartIcon="@Icons.Material.Filled.AddBusiness" Color="Color.Inherit" Class="mx-2" Variant="Variant.Text" Style="color: white;">
+            Shop Creation
+        </MudButton>
+        <MudButton Href="/categories" StartIcon="@Icons.Material.Filled.Category" Color="Color.Inherit" Class="mx-2" Variant="Variant.Text" Style="color: white;">
+            Categories
+        </MudButton>
+        <MudButton Href="/items" StartIcon="@Icons.Material.Filled.Inventory" Color="Color.Inherit" Class="mx-2" Variant="Variant.Text" Style="color: white;">
+            Items
+        </MudButton>
+
+        <MudSpacer />
+    </MudAppBar>
 </MudLayout>
 
 @code
 {
-
-    bool drawerOpen = true;
-    bool darkMode = false;
-
-    void ToogleDrawer()
-    {
-        drawerOpen = !drawerOpen;
-    }
-
-    void ToogleDarkmode()
-    {
-        darkMode = !darkMode;
-    }
-
+    
 }

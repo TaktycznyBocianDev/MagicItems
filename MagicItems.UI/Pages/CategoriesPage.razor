@@ -6,47 +6,50 @@
 
 @inject CategoryService CategoryService
 
-<h1>Magic Item Categories</h1>
+
 @if (CategoryList != null)
 {
-    <MudPaper Class="pa-3 align-baseline flex-auto" Elevation="3" Outlined="true" Square="true">
-        <MudGrid>
-            <MudTextField @bind-Value="@categoryDTO.CategoryName" Label="Name for new category" Variant="Variant.Outlined" Class="custom-text-field"></MudTextField>
-            <MudButton OnClick="CreateNewCategory" Variant="Variant.Filled" Color="Color.Primary">Create new Category!</MudButton>
-        </MudGrid>
-    </MudPaper>
+    <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+        <h1>Magic Item Categories</h1>
+        <MudPaper Class="pa-3 align-baseline flex-auto" Elevation="3" Outlined="true" Square="true">
+            <MudGrid>
+                <MudTextField @bind-Value="@categoryDTO.CategoryName" Label="Name for new category" Variant="Variant.Outlined" Class="custom-text-field"></MudTextField>
+                <MudButton OnClick="CreateNewCategory" Variant="Variant.Filled" Color="Color.Primary">Create new Category!</MudButton>
+            </MudGrid>
+        </MudPaper>
 
-    <MudGrid Justify="Justify.FlexStart">
-        @foreach (var item in CategoryList)
-        {
-            <MudItem sm="12" md="6" lg="4">
-                <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
-                    <div style="display: flex; align-items: center;">
-                        @if (editingCategoryId == item.Id)
-                        {
-                            <MudTextField @bind-Value="@newName" Label="New category name" Variant="Variant.Outlined" Class="custom-text-field"></MudTextField>
-                        }
-                        else
-                        {
-                            <MudText Typo="Typo.h4">@item.CategoryName</MudText>
-                        }
-                        <div style="margin-left: auto;">
+        <MudGrid Justify="Justify.FlexStart">
+            @foreach (var item in CategoryList)
+            {
+                <MudItem sm="12" md="6" lg="4">
+                    <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
+                        <div style="display: flex; align-items: center;">
                             @if (editingCategoryId == item.Id)
                             {
-                                <MudIconButton OnClick="(async () => await UpdateCategory(new Category(item.Id, newName)))" Icon="@Icons.Material.Filled.Done" aria-label="edit"></MudIconButton>
-                                <MudIconButton OnClick="CancelEditing" Icon="@Icons.Material.Filled.Close" aria-label="cancel"></MudIconButton>
+                                <MudTextField @bind-Value="@newName" Label="New category name" Variant="Variant.Outlined" Class="custom-text-field"></MudTextField>
                             }
                             else
                             {
-                                <MudIconButton OnClick="() => StartEditing(item.Id, item.CategoryName)" Icon="@Icons.Material.Filled.Edit" aria-label="edit"></MudIconButton>
-                                <MudButton OnClick="(async () => await DeleteCategory(item.Id, item.CategoryName))" Variant="Variant.Filled" Color="Color.Secondary">Delete</MudButton>
+                                <MudText Typo="Typo.h4">@item.CategoryName</MudText>
                             }
+                            <div style="margin-left: auto;">
+                                @if (editingCategoryId == item.Id)
+                                {
+                                    <MudIconButton OnClick="(async () => await UpdateCategory(new Category(item.Id, newName)))" Icon="@Icons.Material.Filled.Done" aria-label="edit"></MudIconButton>
+                                    <MudIconButton OnClick="CancelEditing" Icon="@Icons.Material.Filled.Close" aria-label="cancel"></MudIconButton>
+                                }
+                                else
+                                {
+                                    <MudIconButton OnClick="() => StartEditing(item.Id, item.CategoryName)" Icon="@Icons.Material.Filled.Edit" aria-label="edit"></MudIconButton>
+                                    <MudButton OnClick="(async () => await DeleteCategory(item.Id, item.CategoryName))" Variant="Variant.Filled" Color="Color.Secondary">Delete</MudButton>
+                                }
+                            </div>
                         </div>
-                    </div>
-                </MudPaper>
-            </MudItem>
-        }
-    </MudGrid>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+    </MudContainer>
 }
 else
 {

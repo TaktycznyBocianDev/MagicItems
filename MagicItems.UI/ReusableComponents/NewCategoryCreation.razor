@@ -1,0 +1,30 @@
+﻿@using MagicItems.Shared.DTOs
+@using MagicItems.UI.Services
+
+@inject CategoryService categoryService
+<MudGrid>
+    <MudTextField @bind-Value="@categoryDTO.CategoryName" Label="Name for new category" Variant="Variant.Outlined" Class="custom-text-field" Required="true"></MudTextField>
+    <MudButton OnClick="@(() => CreateCategory(categoryDTO))" Variant="Variant.Filled" Color="Color.Primary">Create new Category!</MudButton>
+</MudGrid>
+
+@code {
+
+    [Parameter]
+    public EventCallback<CategoryDTO> CreateNewCategory { get; set; }
+
+    private CategoryDTO? categoryDTO = new CategoryDTO();
+
+    private void CreateCategory(CategoryDTO? categoryDTO)
+    {
+        if (categoryDTO != null)
+        {
+            CreateNewCategory.InvokeAsync(categoryDTO);
+        }
+        else
+        {
+            
+        }
+
+    }
+
+}
