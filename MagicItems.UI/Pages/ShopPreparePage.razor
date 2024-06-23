@@ -14,51 +14,54 @@
 @inject NavigationManager NavigationManager
 
 
-<MudContainer MaxWidth="MaxWidth.Large">
-    <MudPaper Class="pa-4">
-        <MudText Typo="Typo.h4">Information about shop:</MudText>
-        <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
-            <MudTextField @bind-Value="shopName" T="string" Label="What is name of this shop?" Required="true" RequiredError="Shop have to have a name!" />
-            <MudTextField @bind-Value="shopOwner" T="string" Label="Who runs this shop?" />
-        </MudForm>
-    </MudPaper>
+<MudContainer MaxWidth="MaxWidth.ExtraLarge">
+    <div class="main-part-style">
+        <MudPaper Class="pa-4">
+            <MudText Typo="Typo.h4">Information about shop:</MudText>
+            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                <MudTextField @bind-Value="shopName" T="string" Label="What is name of this shop?" Required="true" RequiredError="Shop have to have a name!" />
+                <MudTextField @bind-Value="shopOwner" T="string" Label="Who runs this shop?" />
+            </MudForm>
+        </MudPaper>
+    </div>
+    
 
-    <div style="margin: 50px 0;"></div>
+    <div style="margin: 10px 0;"></div>
 
     <MudGrid Justify="Justify.FlexStart">
         <MudItem xs="6">
-            <MudStack>
-                <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                <MudStack>
+                <MudPaper Class="d-flex align-center justify-center mud-width-full ">
                     <MudStack Spacing="3">
-                        <MudText Typo="Typo.h4">
-                            Add items to shop:
+                        <MudText Typo="Typo.h4">Add items to shop: </MudText>
 
-                            <ItemFilter OnFilterApplied="HandleFilterApplied" Row="false"></ItemFilter>
+                            <ItemFilter OnFilterApplied="HandleFilterApplied" Row="true" SpaceOnScreen="12"></ItemFilter>
                             @foreach (var item in itemsListToPick)
                             {
                                 <MudPaper Class="pa-3 align-baseline" Elevation="5" Outlined="true" Square="true">
                                     <div style="display: flex; align-items: center;">
                                         <MudText Typo="Typo.h4">@item.ItemName</MudText>
                                         <div style="margin-left: auto;">
-                                            <MudIconButton Icon="@Icons.Material.Filled.Add" Title="Favorite" OnClick="@(() => AddItemToShopList(item))" />
-                                            <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="@Color.Primary" OnClick="@(async () => await ShowItem(item))" />
+                                            <MudButton Variant="Variant.Filled" Style="background-color: lightseagreen; color: white;" EndIcon="@Icons.Material.Filled.Add" OnClick="@(() => AddItemToShopList(item))">Add</MudButton>
+                                            <MudButton Variant="Variant.Filled" Style="background-color: cornflowerblue; color: white;" EndIcon="@Icons.Material.Filled.RemoveRedEye" OnClick="@(async () => await ShowItem(item))">Show</MudButton>
                                         </div>
                                     </div>
                                 </MudPaper>
                             }
-                        </MudText>
                     </MudStack>
-
                 </MudPaper>
-
-                <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-
-                    <MudText Typo="Typo.h6">Add few random items to shop:</MudText>
-                    <MudPaper Class="pa-1 ma-1" Elevation="0">
-                        <MudText Typo="Typo.subtitle1">How many items should be added: </MudText>
-                        <MudNumericField @bind-Value="howManyItems" Variant="Variant.Outlined" Step="1" Min="1" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Add" Title="Favorite" OnClick="@(() => GetRandomItemsAsync(howManyItems))" />
-                    </MudPaper>
+                
+                <MudPaper Class="d-flex align-center justify-center mud-width-full py-2">
+                    <MudStack>
+                        <MudText Typo="Typo.h6">Add few random items to shop:</MudText>
+                        <MudPaper Class="pa-1 ma-1" Elevation="0">
+                            <MudGrid>
+                                <MudNumericField @bind-Value="howManyItems" Variant="Variant.Outlined" HelperText="How many items should be added" Step="1" Min="1" />
+                                <MudButton Variant="Variant.Filled" Style="background-color: lightseagreen; color: white;" EndIcon="@Icons.Material.Filled.Add" Size="Size.Small" OnClick="@(() => GetRandomItemsAsync(howManyItems))">Add random items!</MudButton>
+                            </MudGrid>
+                        </MudPaper>
+                    </MudStack>
+                    
 
                 </MudPaper>
 
@@ -78,18 +81,25 @@
                         }
                         else
                         {
-                            @foreach (var item in itemInShop)
-                            {
-                                <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
-                                    <div style="display: flex; align-items: center;">
-                                        <MudText Typo="Typo.h4">@item.ItemName</MudText>
-                                        <div style="margin-left: auto;">
-                                            <MudIconButton Icon="@Icons.Material.Filled.Remove" Title="Favorite" OnClick="@(() => RemoveItemFromShopList(item))" />
-                                            <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="@Color.Primary" OnClick="@(async () => await ShowItem(item))" />
+                            <MudStack>
+                                <div style="display: flex; align-items: center;">
+                                    <MudText Typo="Typo.h4">Items in shop: </MudText>
+                                </div>
+                                @foreach (var item in itemInShop)
+                                {
+
+                                    <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
+                                        <div style="display: flex; align-items: center;">
+                                            <MudText Typo="Typo.h4">@item.ItemName</MudText>
+                                            <div style="margin-left: auto;">
+                                                <MudButton Variant="Variant.Filled" Style="background-color: orangered; color: white;" EndIcon="@Icons.Material.Filled.Remove" OnClick="@(() => RemoveItemFromShopList(item))">Remove</MudButton>
+                                                <MudButton Variant="Variant.Filled" Style="background-color: cornflowerblue; color: white;" EndIcon="@Icons.Material.Filled.RemoveRedEye" OnClick="@(async () => await ShowItem(item))">Show</MudButton>
+                                            </div>
                                         </div>
-                                    </div>
-                                </MudPaper>
-                            }
+                                    </MudPaper>
+                                }
+                            </MudStack>
+                            
                         }
                     </MudItem>
                 </MudPaper>
@@ -100,8 +110,8 @@
                     }
                 </MudItem>
                 <MudItem>
-                    <div class="px-3 py-6 mud-elevation-16 rounded-xl fixed" style="bottom:20px;right:20px;">
-                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" IconColor="Color.Secondary" Size="Size.Medium" OnClick="async () => await CreateShop()" >Create and Open Shop!</MudButton>
+                    <div class="px-3 py-3 mud-elevation-10 rounded-xl fixed" style="bottom:20px;right:20px;background-color: white">
+                        <MudButton Variant="Variant.Filled" Style="background-color: darkgreen; color: white;" EndIcon="@Icons.Material.Filled.AddBusiness" Size="Size.Medium" OnClick="async () => await CreateShop()">Create and Open Shop!</MudButton>
                     </div>               
                 </MudItem>
             </MudStack>

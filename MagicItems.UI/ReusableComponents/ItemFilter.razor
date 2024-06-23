@@ -6,7 +6,7 @@
 @inject RarityServicecs raritiesService
 
 
-    <MudItem xs="12" sm="7">
+<MudItem xs="12" sm="@SpaceOnScreen">
         <div class="filter-style ">
         <MudPaper Class="pa-1 ma-1" Elevation="0">
             <MudStack Row="@Row" Spacing="2">
@@ -45,6 +45,8 @@
 @code {
     [Parameter]
     public bool Row { get; set; }
+    [Parameter]
+    public int SpaceOnScreen { get; set; }
 
     private Category[] CategoryList = { };
     private Rarities[] RarityList = { };

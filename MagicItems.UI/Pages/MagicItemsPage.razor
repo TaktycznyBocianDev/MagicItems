@@ -17,7 +17,7 @@
                 <MudButton OnClick="async () => AddSwitch()" StartIcon="@Icons.Material.Filled.Add" Label="Add Item" Variant="Variant.Filled" Style="background-color: green; color: white;" EndIcon="@Icons.Material.Filled.Add" Size="Size.Large">Click here to add new item! </MudButton>
             </div>
 
-            <ItemFilter OnFilterApplied="HandleFilterApplied" Row="true"></ItemFilter>
+            <ItemFilter OnFilterApplied="HandleFilterApplied" Row="true" SpaceOnScreen="7"></ItemFilter>
 
             <MudGrid Justify="Justify.FlexStart">
                 <ItemListDisplayComponent ItemsList="ItemsList" ShowSwitch="ShowSwitch" EditSwitch="EditSwitch" DeleteItem="DeleteItem"></ItemListDisplayComponent>

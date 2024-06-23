@@ -16,10 +16,15 @@
 @if (shops is not null)
 {
     <MudGrid Justify="Justify.FlexStart">
-        <MudItem sm="12" md="6" lg="6">
+
+        <div style="padding: 10px;"></div>
+
+        <MudItem sm="12" md="7" lg="7">
+            <div style="min-height: 10px;"></div>
             <div style="display: flex; align-items: center;">
-                <MudFab Href="/shopCreate" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Label="Create new shop!"></MudFab>
+                <MudButton Href="/shopCreate" StartIcon="@Icons.Material.Filled.Add" Label="Add Item" Variant="Variant.Filled" Style="background-color: green; color: white;" EndIcon="@Icons.Material.Filled.Add" Size="Size.Large">Create new shop!</MudButton>
             </div>
+            <div style="min-height: 10px;"></div>
             @foreach (var item in shops)
             {
                 <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
@@ -29,38 +34,46 @@
                             <MudText Typo="Typo.h5">The owner of shop is: @item.ShopOwner</MudText>
                         </MudStack>
                         <div style="margin-left: auto;">
-                            <MudIconButton OnClick="(async () => await EditShop(item.ShopName))" Icon="@Icons.Material.Filled.Edit" Title="Favorite" Color="@Color.Primary" />
-                            <MudIconButton OnClick="(async () => await ShowShop(item))" Icon="@Icons.Material.Filled.RemoveRedEye" Title="Show Shop" Color="@Color.Primary" />
-                            <MudIconButton OnClick="(async () => await DeleteShop(item.ShopName))" Icon="@Icons.Material.Filled.Delete" Title="Delete" Color="@Color.Error" />
+                            <MudButton OnClick="(async () => await EditShop(item.ShopName))" Variant="Variant.Filled" Style="background-color: orange; color: white;" EndIcon="@Icons.Material.Filled.Edit" Size="Size.Medium">Edit</MudButton>
+                            <MudButton OnClick="(async () => await ShowShop(item))" Variant="Variant.Filled" Style="background-color: deepskyblue; color: white;" EndIcon="@Icons.Material.Filled.RemoveRedEye" Size="Size.Medium">Show</MudButton>
+                            <MudButton OnClick="(async () => await DeleteShop(item.ShopName))" Variant="Variant.Filled" Style="background-color: red; color: white;" EndIcon="@Icons.Material.Filled.Delete" Size="Size.Medium">Delete</MudButton>
 
-                            <MudButton OnClick="(async () => await GoToShopPage(item.ShopName))" Variant="Variant.Filled" Color="Color.Primary">Go to shop page -></MudButton>
+                            <MudButton OnClick="(async () => await GoToShopPage(item.ShopName))" Variant="Variant.Filled" Style="background-color: green; color: white;" EndIcon="@Icons.Material.Filled.ArrowRight">Go to shop page</MudButton>
                             
                         </div>
                     </div>
                 </MudPaper>
             }
         </MudItem>
-        <MudItem sm="12" md="6" lg="5">
+        <MudItem sm="12" md="6" lg="4">
 
             @if (showShop)
             {
                 <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
-                <MudText Typo="Typo.h5">@shopToShow.ShopName</MudText>
-                <MudText Typo="Typo.h6">The owner of shop is: @shopToShow.ShopOwner</MudText>
+                <MudText Typo="Typo.h4">@shopToShow.ShopName</MudText>
+                    @if (@shopToShow.ShopOwner != null && @shopToShow.ShopOwner != "")
+                    {
+                        <MudText Typo="Typo.h4">The owner of shop is: @shopToShow.ShopOwner</MudText>
+                    }
+                    else
+                    {
+                        <MudText Typo="Typo.h4">This shop dont have an owner.</MudText>
+                        
+                    }
+                    
                 @foreach (var item in itemsToShow)
                 {
                         <MudPaper Class="pa-3 align-baseline" Elevation="3" Outlined="true" Square="true">
                             <div style="display: flex; align-items: center;">
-                                <MudGrid>
+                                <MudGrid Justify="Justify.SpaceEvenly">
                                     <MudItem>
-                                        <MudText Typo="Typo.subtitle2"> @item.ItemName </MudText>
+                                        <MudText Typo="Typo.h5"> @item.ItemName </MudText>
                                     </MudItem>
+                                    <div style="margin-left: auto; align-content:center">
                                     <MudItem>
-                                        <MudText Typo="Typo.subtitle2"> @item.ShortDescription </MudText>
+                                        <MudText Typo="Typo.h6"> Price: @item.Price </MudText>
                                     </MudItem>
-                                    <MudItem>
-                                        <MudText Typo="Typo.subtitle2"> Price: @item.Price </MudText>
-                                    </MudItem>
+                                    </div>
                                                                   
                                 </MudGrid>
                                 

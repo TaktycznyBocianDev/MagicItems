@@ -7,6 +7,7 @@
 @inject ShopService shopService
 @inject ShopItemService shopItemService
 
+<MudContainer MaxWidth="MaxWidth.ExtraLarge">
 <MudStack>
 
     <div class="centered-container">
@@ -27,15 +28,16 @@
         <MudGrid Justify="Justify.FlexStart">
             @foreach (var item in selectedItems)
             {
-                <MudItem>
-                    <ItemDisplayComponent Item="item" />
-                </MudItem>
+                    <MudItem xs="12" sm="3">
+                        <ItemDisplayComponent Item="item" />
+                    </MudItem>
 
             }
         </MudGrid>
     }
 
 </MudStack>
+</MudContainer>
 <div class="px-2 py-2 mud-elevation-3 rounded-xl fixed" style="background-color: white; bottom:20px;right:20px;">
     <MudToggleIconButton @bind-Toggled="isEditing" Icon="@Icons.Material.Filled.Edit" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.RemoveRedEye" ToggledColor="Color.Inherit" />
 </div>

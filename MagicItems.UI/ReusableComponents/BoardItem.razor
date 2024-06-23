@@ -27,23 +27,31 @@
             }
             else
             {
-                
-                <MudText Typo="Typo.h6">@Item.ItemName</MudText>
-                <MudText Typo="Typo.h6">Category: @Item.CategoryName</MudText>
-                <MudText Typo="Typo.h6">Price: @Item.Price</MudText>
-                <MudText Typo="Typo.h6">Rarity: @Item.RarityName</MudText>
-                @if (itemVisible)
-                {
-                    <MudIconButton OnClick="@(() => SendItemDetails(Item))" Icon="@Icons.Material.Outlined.RemoveRedEye" Color="Color.Primary" aria-label="See item" Size="Size.Small"></MudIconButton>
-                }
-                else
-                {
-                    <MudIconButton OnClick="@(() => SendItemDetails(Item))" Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" aria-label="See item" Size="Size.Small"></MudIconButton>
-                }
-                <MudButton OnClick="@(() => SellItem(Item))" Variant="Variant.Filled" Color="Color.Success">Sell</MudButton>
-                
-               
-                
+                <MudGrid Justify="Justify.SpaceBetween" AlignItems="Center">
+                    <MudItem xs="12" sm="3">
+                        <MudText Typo="Typo.h5">@Item.ItemName</MudText>
+                    </MudItem>
+                    <MudItem xs="12" sm="3">
+                        <MudText Typo="Typo.h5">Category: @Item.CategoryName</MudText>
+                    </MudItem>
+                    <MudItem xs="12" sm="2">
+                        <MudText Typo="Typo.h5">Price: @Item.Price gp</MudText>
+                    </MudItem>
+                    <MudItem xs="12" sm="2">
+                        <MudText Typo="Typo.h5">Rarity: @Item.RarityName</MudText>
+                    </MudItem>
+                    <MudItem xs="12" sm="2">
+                    @if (!itemVisible)
+                    {
+                        <MudButton OnClick="@(() => SendItemDetails(Item))" Variant="Variant.Filled" Style="background-color: gray; color: white;" EndIcon="@Icons.Material.Filled.HideImage">Hide</MudButton>
+                    }
+                    else
+                    {
+                        <MudButton OnClick="@(() => SendItemDetails(Item))" Variant="Variant.Filled" Style="background-color: deepskyblue; color: white;" EndIcon="@Icons.Material.Filled.RemoveRedEye">Show</MudButton>
+                    }
+                        <MudButton OnClick="@(() => SellItem(Item))" Variant="Variant.Filled" Style="background-color: green; color: white;" EndIcon="@Icons.Material.Filled.Sell">Sell</MudButton>
+                    </MudItem>
+                </MudGrid>
             }
 
         </MudGrid>
